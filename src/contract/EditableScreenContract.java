@@ -21,32 +21,29 @@ public class EditableScreenContract extends ScreenContract implements EditableSc
 	/** Invariant: mininisation de isPlayable()
 	 * 	isPlayable() == (\forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) 
 	 * 					 \with CellNature(x,y)!=HOL
-	 * 						 \and \forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) \with CellNature(x,y)=MTL)
+	 * 						 \and \forall x (x \in {0...width()-1}) and \forall y (y == 0) \with CellNature(x,y)=MTL)
 	 */
 	public void checkInvariant() {
 
 		super.checkInvariant();
-
-		boolean isHOL=true, isMTL=true;
-		for (int i=0; i<getWidth(); i++) {
-			if (CellNature(i,0)!=Cell.MTL) {
-				isMTL = false;
-				break;
+		
+	
+		if(isPlayable()) {
+		
+			for (int i=0; i<getWidth(); i++) {
+				if (CellNature(i,0)!=Cell.MTL) {
+					throw new InvariantError("EditableScreenContract ==> \\inv CellNature(i,0)==Cell.MTL isPlayable() ");
+				}
 			}
-		}
-		for (int i = 0; i < getWidth(); i++) {
-			for (int j = 0; j < getHeight(); j++) {
-				if (CellNature(i, j) == Cell.HOL) {
-					isHOL = false;
-					break;
+
+			for (int i = 0; i < getWidth(); i++) {
+				for (int j = 0; j < getHeight(); j++) {
+					if (CellNature(i, j) == Cell.HOL) {
+						throw new InvariantError("EditableScreenContract ==> \\inv CellNature(i, j) != Cell.HOL isPlayable() ");
+					}
 				}
 			}
 		}
-
-		if (isPlayable()!=(isMTL&&isHOL)) {
-			throw new InvariantError("EditableScreenContract ==> \\inv isPlayable() ");
-		}
-
 	}
 
 	/** Operateur: editer directement le contenu d'une case

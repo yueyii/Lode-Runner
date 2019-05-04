@@ -38,7 +38,7 @@ public class PlayerContract extends CharacterContract implements Player {
 	
 	@Override
 	public Command NextCommand() {
-		return getDelegate().NextCommand();
+		return getDelegate().NextCommand(); 
 	} 
 	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
 	 * 
@@ -90,7 +90,7 @@ public class PlayerContract extends CharacterContract implements Player {
 				}
 			}
 		}
-		
+		 
 		if (command_pre==Command.DIGR) {
 			if(((getEnvi().CellNature(wdt_pre, hgt_pre-1)!=Cell.HOL)
 					&& (getEnvi().CellNature(wdt_pre, hgt_pre-1)!=Cell.EMP))

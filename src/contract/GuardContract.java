@@ -86,7 +86,7 @@ public class GuardContract extends CharacterContract implements Guard{
 
 				}
 			}
-		}
+		} 
 
 		else if ((getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD)&&
 				(getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.PLT
@@ -185,7 +185,7 @@ public class GuardContract extends CharacterContract implements Guard{
 			throw new PreconditionError("GuardContract ClimbLeft() ==> //pre:guard n'esr pas dans le trou ");	
 		}
 
-		//checkinv
+		//checkinv 
 		CheckInvariant();
 
 		//capture
@@ -397,12 +397,12 @@ public class GuardContract extends CharacterContract implements Guard{
 			throw new InvariantError("GuardContract init() ==> \\pre 0<getWdt()<getEnvi().getWidth()");	
 		}
 		
-		//si garde existe d¨¦ja dans la liste de gardes
-		if(!getGuardIdList().isEmpty()) {
-			if (getGuardIdList().contains(id)) {
-				throw new PreconditionError("GuardContract init() ==> //pre id de garde existe d¨¦ja");
-			}
-		}
+//		//si garde existe d¨¦ja dans la liste de gardes
+//		if(!getGuardIdList().isEmpty()) {
+//			if (getGuardIdList().contains(id)) {
+//				throw new PreconditionError("GuardContract init() ==> //pre id de garde existe d¨¦ja");
+//			}
+//		}
 		getDelegate().init(screen, x, y, id);
 	}
 

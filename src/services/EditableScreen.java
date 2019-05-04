@@ -8,8 +8,8 @@ public interface EditableScreen extends Screen{
 	public boolean isPlayable();
 	
 	/** Invariant: mininisation de isPlayable()
-	 * 	isPlayable() == (\forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) \with CellNature(x,y)!=HOL
-	 * 						 \and \forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) \with CellNature(x,y)=MTL)
+	 * 	isPlayable() == (\forall x (x \in {0...width()-1}) \and \forall y (y \in {0...Height()-1}) \with CellNature(x,y)!=HOL
+	 * 						 \and \forall x (x \in {0...width()-1}) \and y==0 \with CellNature(x,y)==MTL)
 	 */
 
 	 /** Operateur: editer directement le contenu d'une case

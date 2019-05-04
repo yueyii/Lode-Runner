@@ -11,9 +11,14 @@ public class BuildEnvi {
 		
 		//d¨¦finie les plateformes
 		for (int i = 0; i < editableContract.getWidth(); i++) {
-			for (int j = 0; j < 2 ; j++) {
+			for (int j = 0; j < 1 ; j++) {
+				editableContract.setNature(i, j, Cell.MTL);
+			}
+		}
+		
+		for (int i = 0; i < editableContract.getWidth(); i++) {
+			for (int j = 1; j < 2 ; j++) {
 				editableContract.setNature(i, j, Cell.PLT);
-			
 			}
 		}
 		for (int i = 0; i < 6; i++) {
@@ -34,7 +39,7 @@ public class BuildEnvi {
 		}
 		
 		for (int i = 12; i < editableContract.getWidth() ; i++) {
-			for (int j = 10 ; j < 12; j++) {
+			for (int j = 10 ; j < 13; j++) {
 				editableContract.setNature(i, j, Cell.PLT);
 			}
 		}
@@ -42,6 +47,8 @@ public class BuildEnvi {
 		//d¨¦finie le rail
 		for (int i = 7; i < 11 ; i++) {
 			editableContract.setNature(i, 7, Cell.HDR);
+			
+			editableContract.setNature(i, 11, Cell.HDR);
 		}
 		
 		//d¨¦finir l'¨¦chelle

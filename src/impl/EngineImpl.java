@@ -76,7 +76,7 @@ RequireHolesService{
 	@Override
 	public void bindGuardService(Guard service) {
 		guard = service;
-		//ajouter ce garde dans une liste 
+		//ajouter ce garde dans une liste  
 		guardlist.add(guard);
 		//ajouter la paire de positions initiales de ce garde dans une liste
 		guardinitlist.add(new Pair<Integer,Integer>(guard.getWdt(), guard.getHgt()));
@@ -158,6 +158,7 @@ RequireHolesService{
 				cellMap.put((Item)item, new Pair<Integer,Integer>(newwdt, newhgt));
 				System.out.println("Item" +item.getItemId() + " Wdt :"+newwdt+" item Hgt :"+ newhgt);
 				
+				//si le gardes a d¨¦pos¨¦ le tr¨¦sor
 				if(isToPutDown()) {
 					int newwdt2 = cellMap.get(guardlist.get(guardposition)).getKey();
 					int newhgt2 = cellMap.get(guardlist.get(guardposition)).getValue()+1;
@@ -171,9 +172,8 @@ RequireHolesService{
 				System.out.println("Item" +item.getItemId() + " Wdt :"+wdt+" item Hgt :"+ hgt);
 			}
 		}
-
-
-
+		
+		//si le joueur a pris le tr¨¦sor
 		if(toDelete) {
 			//parcourir tous les tr¨¦sors
 			for (int i = 0; i < itemlist.size(); i++) {			
@@ -203,7 +203,7 @@ RequireHolesService{
 				updatePlayer(player);
 			}
 
-			Label:
+			Label: 
 				//mise ¨¤ jour les positions des gardes
 				for (int i = 0; i < guardlist.size(); i++) {
 					guardlist.get(i).Step();
@@ -293,6 +293,7 @@ RequireHolesService{
 
 	public void control(int nbSteps) {
 		//nbstep est le temps d'un tour
+		
 		for(int i=0;i<nbSteps;i++) {
 			//si le jeu termine, sortir la boucle
 			if(this.status==Status.Loss || this.status==Status.Win) {

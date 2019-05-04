@@ -19,6 +19,7 @@ RequirePlayerService, RequireEngineService{
 	private int time;
 	private Move move;
 	private EngineImpl engine;
+	final int timeLimit = 1;
 	
 	public GuardImpl() {
 		id=0;
@@ -266,12 +267,12 @@ RequirePlayerService, RequireEngineService{
 		}
 
 		if(getEnvi().CellNature(getWdt(), getHgt())==Cell.HOL) {
-			if(getTimeInhole()<5) {	
+			if(getTimeInhole()<timeLimit) {	
 				this.time=this.time+1;
 				System.out.println("temps +1");
 			}
 
-			else if(getTimeInhole()==5) {
+			else if(getTimeInhole()==timeLimit) {
 				if(getBehaviour()==Move.LEFT) {
 					ClimbLeft();
 					System.out.println("Le garde "+getGardeId()+" grimbe ид gauche");

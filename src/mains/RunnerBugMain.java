@@ -48,7 +48,7 @@ public class RunnerBugMain {
 		enviContract.init(14, 14,editableContract);
 		envi.bindEngineService(engine);
 		
-		playerContract.init(enviContract, -2 ,7);
+		playerContract.init(enviContract, 2 ,7);
 		guardContract.init(enviContract, 5 , 2, 0);
 		guardContract2.init(enviContract, 0 , 7, 1);
 		itemContract.init(enviContract, 1, 7, 0, ItemType.TREASURE);
@@ -80,7 +80,7 @@ public class RunnerBugMain {
 			engine.control(1);	
 		}
 		for (int i = 5; i < 8; i++) { 
-			engine.setCommand(Command.RIGHT); 
+			engine.setCommand(Command.RIGHT);  
 			engine.control(1);			
 		}
 	}

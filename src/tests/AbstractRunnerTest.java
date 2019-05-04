@@ -44,7 +44,7 @@ public abstract class AbstractRunnerTest {
 
 	public Guard getGuard(Guard guard) {
 		for (int i = 0; i < guardlist.size(); i++) {
-			if(guardlist.get(i).equals(guard)) {
+			if(guardlist.get(i).getGardeId()==guard.getGardeId()) {
 				return guard;
 			}
 		}
@@ -111,6 +111,7 @@ public abstract class AbstractRunnerTest {
 		envi = null;
 		editscreen =null;
 		engine = null;
+		buildenvi =null;
 		guardlist.clear();
 		itemlist.clear();
 	}

@@ -104,7 +104,7 @@ public class CharacterContract extends CharacterDecorator {
 					}
 				}
 			}
-		}
+		} 
 		if (!cLeft.isEmpty()) {
 			if (getWdt_pre!=getWdt()) {
 				throw new PostconditionError("CharacterContract goLeft() ==> \\post un personnage a gauche");	

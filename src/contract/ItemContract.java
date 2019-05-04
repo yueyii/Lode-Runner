@@ -31,16 +31,25 @@ public class ItemContract extends ItemDecorator {
 	
 	@Override
 	public void init(Screen screen, int x, int y, int id, ItemType nature) {
+		if(x< 0 || x> screen.getWidth()) {
+			throw new PreconditionError("ItemContract init()==> //pre : 0<x<getWdith()");		
+		}
+		
+		if(y< 0 || y> screen.getHeight()) {
+			throw new PreconditionError("ItemContract init()==> //pre : 0<y<getHeight() ");		
+		}
+		
 		if(id<0) {
 			throw new PreconditionError("ItemContract init()==> //pre : id>=0 ");	
 		}
 
-		//si id d'item existe d¨¦ja dans la liste d'item
-		if(!getItemIdList().isEmpty()) {
-			if (getItemIdList().contains(id)) {
-				throw new PreconditionError("ItemContract init()==> //pre id d'item existe d¨¦ja");
-			}
-		}
+//		//si id d'item existe d¨¦ja dans la liste d'item
+//		if(!getItemIdList().isEmpty()) {
+//			if (getItemIdList().contains(id)) {
+//				System.out.println("itemsdsd"+id);
+//				throw new PreconditionError("ItemContract init()==> //pre id d'item existe d¨¦ja");
+//			}
+//		}
 		
 		if(nature !=ItemType.TREASURE) {
 			throw new InvariantError("ItemContract ==> \\getNature()==treasure ");	

@@ -68,7 +68,7 @@ public class ScreenContract extends ScreenDecorator implements Screen {
 				if(CellNature(x, y)!=Cell.EMP) {
 					throw new PostconditionError("ScreenContract Init(int h, int w) ==> cellNature n'est pas empty");	
 				}
-			}
+			} 
 		}
 	}
 

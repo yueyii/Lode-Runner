@@ -72,11 +72,7 @@ public class EnvironmentContract extends ScreenContract implements Environment {
 			for (int j = 0; j < getHeight(); j++) {
 				if (CellNature(i,j)==Cell.MTL || CellNature(i,j)==Cell.PLT) {	
 					if (!getCellContent(i,j).isEmpty()) {
-						System.out.println("i :" + i + " j :"+j);
-						System.out.println(getCellContent(i,j));
-						System.out.println(CellNature(i, j));
 						throw new InvariantError("EnvironnmentContract ==> \\inv une case non-libre ne contient rien ");
-
 					}
 				}
 			}
