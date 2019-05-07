@@ -21,7 +21,7 @@ public class ScreenDecorator implements Screen{
 
 	@Override
 	public int getWidth() {
-		return getDelegate().getHeight();
+		return getDelegate().getWidth();
 	}
 
 	@Override

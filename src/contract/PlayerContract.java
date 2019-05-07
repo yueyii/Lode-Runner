@@ -40,7 +40,7 @@ public class PlayerContract extends CharacterContract implements Player {
 	public Command NextCommand() {
 		return getDelegate().NextCommand(); 
 	} 
-	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
+	/** Operateur:definir les predicats cet reutiliser dans
 	 * 
 	 * GoDown(C) \def (Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1)) \in {HOL,EMP}
 	 * 		\and not exists Character c \in Environment::CellContent(Envi(C),Wdt(C),Hgt(C)-1))

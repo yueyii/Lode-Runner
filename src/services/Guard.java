@@ -8,7 +8,7 @@ public interface Guard extends Character, Engine {
 	public Character getTarget();
 	public int getTimeInhole();
 	
-	//l'op¨¦ration ce qu'on a ajout¨¦ pour compl¨¦ter la service guard
+	//l'operation ce qu'on a ajoute pour completer la service guard
 	public void init(Screen screen, int x, int y, int id);
 	public ArrayList<Integer> getGuardIdList();
 
@@ -45,7 +45,7 @@ public interface Guard extends Character, Engine {
 	  */
 	public void ClimbRight();
 	
-	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
+	/** Operateur:definir les predicats cet reutiliser dans
 	 * 
 	 * GoDown(C) \def (Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1)) \in {HOL,EMP}
 	 * 		\and not exists Character c \in Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1))

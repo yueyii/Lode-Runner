@@ -26,11 +26,11 @@ public class GuardContract extends CharacterContract implements Guard{
 	public void CheckInvariant() {
 
 		if(getTarget().equals(super.getDelegate())) {
-			throw new InvariantError("GuardContract ==> \\inv target n'est pas une caract¨¨re");
+			throw new InvariantError("GuardContract ==> \\inv target n'est pas une caractere");
 		}
 
 		if(getTimeInhole()<0) {
-			throw new InvariantError("GuardContract ==> \\inv timeinhole in¨¦frieur que 0");
+			throw new InvariantError("GuardContract ==> \\inv timeinhole inefrieur que 0");
 		}
 
 		if(getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD) {
@@ -49,13 +49,13 @@ public class GuardContract extends CharacterContract implements Guard{
 			}
 			else if(getWdt() > getTarget().getWdt()) {
 				if(getBehaviour()!=Move.LEFT) {
-					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ gauche");
+					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a gauche");
 				}
 
 			}
 			else if(getWdt() < getTarget().getWdt()) {
 				if(getBehaviour()!=Move.RIGHT) {
-					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ droite");
+					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a droite");
 
 				}
 			}
@@ -76,13 +76,13 @@ public class GuardContract extends CharacterContract implements Guard{
 
 			if(getWdt() > getTarget().getWdt()) {
 				if(getBehaviour()!=Move.LEFT) {
-					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ gauche");
+					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a gauche");
 			}
 
 			}
 			else if(getWdt() < getTarget().getWdt()) {
 				if(getBehaviour()!=Move.RIGHT) {
-					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ droite");
+					throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a droite");
 
 				}
 			}
@@ -112,15 +112,15 @@ public class GuardContract extends CharacterContract implements Guard{
 				else if(getWdt() > getTarget().getWdt()) {	
 					if((getWdt()-getTarget().getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 						if(getBehaviour()!=Move.LEFT) {
-							throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ gauche");
+							throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a gauche");
 						}
 					}
 				}
-				//si le joueur est ¨¤ sa droite
+				//si le joueur est a sa droite
 				else if(getWdt() < getTarget().getWdt()) {			
 					if((getTarget().getWdt()-getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 						if(getBehaviour()!=Move.RIGHT) {
-							throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas ¨¤ droite");
+							throw new InvariantError("GuardContract ==> \\inv getBehaviour() bouger pas a droite");
 
 						}
 					}
@@ -324,7 +324,7 @@ public class GuardContract extends CharacterContract implements Guard{
 		}
 	}
 
-	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
+	/** Operateur:definir les predicats cet reutiliser dans
 	 * 
 	 * GoDown(C) \def (Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1)) \in {HOL,EMP}
 	 * 		\and not exists Character c \in Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1))
@@ -397,12 +397,6 @@ public class GuardContract extends CharacterContract implements Guard{
 			throw new InvariantError("GuardContract init() ==> \\pre 0<getWdt()<getEnvi().getWidth()");	
 		}
 		
-//		//si garde existe d¨¦ja dans la liste de gardes
-//		if(!getGuardIdList().isEmpty()) {
-//			if (getGuardIdList().contains(id)) {
-//				throw new PreconditionError("GuardContract init() ==> //pre id de garde existe d¨¦ja");
-//			}
-//		}
 		getDelegate().init(screen, x, y, id);
 	}
 

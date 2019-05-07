@@ -23,27 +23,42 @@
     <javac debug="true" srcdir="${src}" excludes="" destdir="${build}" includeantruntime="false" />
   </target>
 
-  <target name="run1" depends="compile"
+  <target name="runMain" depends="compile"
           description="run application in release mode">
     <echo>================ Run Object Main ================</echo>
-    <java classname="bridge.main.LodeRunnerImpl"
+    <java classname="cps_projet.src.mains.RunnerMain1"
           classpath="${build}">
     </java>
   </target>
 
-  <target name="run2" depends="compile"
+  <target name="runBugMain" depends="compile"
           description="run application in test mode">
     <echo>================ Run Object Main ================</echo>
-    <java classname="bridge.main.LodeRunnerImpl"
+    <java classname="cps_projet.src.mains.RunnerBugMain2"
           classpath="${build}">
     </java>
   </target>
+	
+  <target name="JunitTest1" depends="compile"
+	          description="test of first implementation">
+	  <echo>================ Run first test ================</echo>
+	  <junit printsummary="yes">
+	      <classpath>
+	        <pathelement location="${build}"/>
+	        <pathelement location="${jars}/junit.jar"/>
+	      </classpath>
 
+	      <formatter type="plain"/>
+
+	      <test name="cps_projet.src.tests.test1" outfile="report1"/>
+
+	    </junit>
+	  </target>
   <target name="dist" depends="init,clean"
         description="Generer la distribution" >
     <!-- tout mettre dans l'archive -->
     <jar basedir=".." jarfile="../cps_projet-${nom1}-${nom2}-${DSTAMP}.jar"
-    includes="TME8-LodeRunner/**/*" excludes="**/CVS"/>
+    includes="LodeRunner/**/*" excludes="**/CVS"/>
   </target>
 
   <target name="clean"

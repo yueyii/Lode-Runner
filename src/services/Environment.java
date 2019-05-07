@@ -19,7 +19,7 @@ public interface Environment extends Screen {
 	/** Invariant: une case ne contient un tresor que si la case en dessous d'elle est non-libre
 	 *  \forall x (x \in {0...width()-1}), \forall y (y \in {0...Height()-1}), \exists Treasure t \in CellContent(x,y) \implies (CellContent(x,y)=EMP \and CellContent(x,y-1) \in {PLT,MTL}) 
 	 */
-	// ce qu'on a ajout¨¦ pour lier envi et edit
+	// ce qu'on a ajoute pour lier envi et edit
 	public void init(int x, int y , EditableScreen edit);
 	 
 }

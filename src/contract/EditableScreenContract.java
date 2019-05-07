@@ -55,8 +55,8 @@ public class EditableScreenContract extends ScreenContract implements EditableSc
 	public void setNature(int x , int y, Cell cell) {
 
 		//1 Pre-condition
-		if(x<0 || x>= getHeight() || y<0 || y>=getWidth()) {
-			throw new PreconditionError("EditableScreenContract setNature(int x , int y, Cell cell) ==> \\pre  0 <= x < getHeight() and 0 <= y < getWidth() ");
+		if(x<0 || x >= getWidth() || y<0 || y>=getHeight()) {
+			throw new PreconditionError("EditableScreenContract setNature(int x , int y, Cell cell) ==> \\pre  0 <= x < getWidth() and 0 <= y < getHeight() ");
 		}
 
 		//2 Invariant

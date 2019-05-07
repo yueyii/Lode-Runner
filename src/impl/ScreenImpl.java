@@ -28,7 +28,6 @@ public class ScreenImpl implements Screen {
 		width=x;
 		height=y;
 		cellList = new Cell[width][height];
-		
 		for (int i = 0; i < width ; i++) {
 			for (int j = 0; j < height; j++) {
 				cellList[i][j] = Cell.EMP;

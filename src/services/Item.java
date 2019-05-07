@@ -9,7 +9,7 @@ public interface Item extends CellContent {
 	public int getItemHgt();
 	public int getItemCol();
 	
-	//ce qu'on a ajout¨¦ pour compl¨¦ter la service Item
+	//ce qu'on a ajoute pour completer la service Item
 	public void init(Screen screen, int x, int y, int id, ItemType nature);
 	public ArrayList<Integer> getItemIdList();
 }

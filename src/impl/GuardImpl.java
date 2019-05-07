@@ -19,6 +19,7 @@ RequirePlayerService, RequireEngineService{
 	private int time;
 	private Move move;
 	private EngineImpl engine;
+	//Le temps de limite de garde grimper
 	final int timeLimit = 1;
 	
 	public GuardImpl() {
@@ -66,33 +67,26 @@ RequirePlayerService, RequireEngineService{
 		if(getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD) {
 			if(getHgt() < getTarget().getHgt()) {
 				this.move=Move.UP;
-				//	System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Up");
 			}
 
 			//si le joueur est en dessous de lui
 			else if(getHgt() > getTarget().getHgt()) {
 				this.move=Move.DOWN;
-				//	System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Down");
-
 			}
 			else if(getWdt() < getTarget().getWdt()) {
 				this.move=Move.RIGHT;
-				//				System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles  ==> Right");
-
 			}
 
 			else if(getWdt() > getTarget().getWdt()) {
 				this.move=Move.LEFT;
-				//				System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Left");
 			}
 
 			else {
 				this.move=Move.NEUTRAL;
-				//				System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Neutral");
 			}
 			return move;
 		}
-		//si le joueur est ¨¤ sa gauche
+		//si le joueur est a sa gauche
 
 		else if ((getEnvi().CellNature(getWdt(),getHgt())==Cell.HOL
 				||getEnvi().CellNature(getWdt(),getHgt())==Cell.HDR 
@@ -108,10 +102,10 @@ RequirePlayerService, RequireEngineService{
 				//				else {
 				this.move=Move.LEFT;
 				//				}
-				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur ¨¤ sa gauche ==> Left");
+				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa gauche ==> Left");
 			}
 
-			//si le joueur est ¨¤ sa droite
+			//si le joueur est a sa droite
 			else if(getWdt() < getTarget().getWdt()) {	
 				//				if(getEnvi().CellNature(getWdt()+1,getHgt())!=Cell.LAD) {
 				//					this.move=Move.LEFT;
@@ -119,7 +113,7 @@ RequirePlayerService, RequireEngineService{
 				//				else {
 				this.move=Move.RIGHT;
 				//				}
-				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur ¨¤ sa droite  ==> Right");
+				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa droite  ==> Right");
 			}
 
 			else {
@@ -128,6 +122,8 @@ RequirePlayerService, RequireEngineService{
 			}
 			return move;
 		}
+		
+		
 		else if ((getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD)&&
 				(getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.PLT
 				|| getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.MTL 
@@ -136,7 +132,7 @@ RequirePlayerService, RequireEngineService{
 			if(getHgt() < getTarget().getHgt()) {
 				if((getTarget().getHgt()-getHgt())<Math.abs(getTarget().getWdt()-getWdt())) {
 					this.move=Move.UP;
-					//					System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Up");
+					//					System.out.println("number"+getGardeId()+"garde dans une echelles ==> Up");
 				} 
 			}
 
@@ -144,22 +140,22 @@ RequirePlayerService, RequireEngineService{
 			else if(getHgt() > getTarget().getHgt()) {
 				if((getHgt()-getTarget().getHgt())<Math.abs(getTarget().getWdt()-getWdt())) {
 					this.move=Move.DOWN;
-					//					System.out.println("number"+getGardeId()+"garde dans une ¨¦chelles ==> Down");
+					//					System.out.println("number"+getGardeId()+"garde dans une echelles ==> Down");
 				}
 			}
 
 			else if(getWdt() > getTarget().getWdt()) {	
 				if((getWdt()-getTarget().getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 					this.move=Move.LEFT;
-					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur ¨¤ sa gauche ==> Left");
+					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa gauche ==> Left");
 				}
 			}
 
-			//si le joueur est ¨¤ sa droite
+			//si le joueur est a sa droite
 			else if(getWdt() < getTarget().getWdt()) {			
 				if((getTarget().getWdt()-getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 					this.move=Move.RIGHT;
-					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur ¨¤ sa droite  ==> Right");
+					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa droite  ==> Right");
 				}	
 			}
 
@@ -218,7 +214,7 @@ RequirePlayerService, RequireEngineService{
 
 	}
 
-	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
+	/** Operateur:definir les predicats cet reutiliser dans
 	 * 
 	 * GoDown(C) \def (Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1)) \in {HOL,EMP}
 	 * 		\and not exists Character c \in Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1))
@@ -275,11 +271,11 @@ RequirePlayerService, RequireEngineService{
 			else if(getTimeInhole()==timeLimit) {
 				if(getBehaviour()==Move.LEFT) {
 					ClimbLeft();
-					System.out.println("Le garde "+getGardeId()+" grimbe ¨¤ gauche");
+					System.out.println("Le garde "+getGardeId()+" grimbe a gauche");
 				}
 				else if(getBehaviour()==Move.RIGHT) {
 					ClimbRight();
-					System.out.println("Le garde "+getGardeId()+" grimbe ¨¤ droite");
+					System.out.println("Le garde "+getGardeId()+" grimbe a droite");
 				}
 				else if(getBehaviour()==Move.NEUTRAL) {
 					System.out.println("Le garde "+getGardeId()+" ne bouge pas");

@@ -14,13 +14,13 @@ import contract.EnvironmentContract;
 import contract.GuardContract;
 import contract.ItemContract;
 import contract.PlayerContract;
+import facade.BuildEnvi;
 import impl.EditableScreenImpl;
 import impl.EngineImpl;
 import impl.EnvironmentImpl;
 import impl.GuardImpl;
 import impl.ItemImpl;
 import impl.PlayerImpl;
-import mains.BuildEnvi;
 import services.Cell;
 import services.CellContent;
 import services.Command;
@@ -32,7 +32,12 @@ import services.ItemType;
 import services.Move;
 import services.Player;
 import services.Status;
-
+/*
+ * 
+ * 
+ * 
+ * 
+ * */
 public class test1 extends AbstractRunnerTest{
 	EngineImpl engine = new EngineImpl();
 	BuildEnvi buildenvi = new BuildEnvi();
@@ -71,28 +76,28 @@ public class test1 extends AbstractRunnerTest{
 		setBuildenvi(buildenvi);
 	} 
 
-	/*------------Tests pr¨¦-condition-----------*/
+	/*------------Tests pre-condition-----------*/
 	@Test
 	public void testInitPreCasPos() throws Exception{
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
-			getEnvi().init(14, 14,getEditscreen());
+			getEditscreen().Init(28, 16);
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
 			//intialiser le joueur
-			getPlayer().init(getEnvi(), 3, 7);
+			getPlayer().init(getEnvi(), 23, 9);
 
 			//initialiser deux gardes
-			getGuard(guard).init(getEnvi(), 5, 2, 0);
-			getGuard(guard2).init(getEnvi(), 0, 7, 1);
+			getGuard(guard).init(getEnvi(), 0, 6, 0);
+			getGuard(guard2).init(getEnvi(), 6, 3, 1);
 
-			//intialiser deux tr¨¦sors
-			getItem(item).init(getEnvi(), 1, 7, 0, ItemType.TREASURE);
-			getItem(item2).init(getEnvi(), 13, 6, 1, ItemType.TREASURE);
+			//intialiser deux tresors
+			getItem(item).init(getEnvi(), 3, 14, 0, ItemType.TREASURE);
+			getItem(item2).init(getEnvi(), 8, 3, 1, ItemType.TREASURE);
 
-			//cr¨¦er les liaison entre les services 
+			//creer les liaison entre les services 
 			playerImpl.bindEngineService(getEngine());
 			guardImpl.bindPlayerService(getPlayer());
 			guard2Impl.bindPlayerService(getPlayer());
@@ -112,13 +117,13 @@ public class test1 extends AbstractRunnerTest{
 	public void testInitPrePlayerCasNeg() {
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
-			getEnvi().init(14, 14,getEditscreen());
+			getEditscreen().Init(28, 16);
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
 			//intialiser le joueur, l'axe est negatif
-			getPlayer().init(getEnvi(), -2, 7);
+			getPlayer().init(getEnvi(), -23, 9);
 
 			getEngine().bindPlayerService(getPlayer());
 
@@ -133,19 +138,19 @@ public class test1 extends AbstractRunnerTest{
 	public void testInitPreGuardCasNeg() {
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
-			getEnvi().init(14, 14,getEditscreen());
+			getEditscreen().Init(28, 16);
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
 			//intialiser le joueur, l'axe est negatif
-			getPlayer().init(getEnvi(), 2, 7);
+			getPlayer().init(getEnvi(), 23, 9);
 
 			//initialiser deux gardes, il ont les meme id
-			getGuard(guard).init(getEnvi(), -5, 2, 1);
+			getGuard(guard).init(getEnvi(), 0, -6, 1);
 			getGuard(guard2).init(getEnvi(), 0, 7, 1);
 
-			//cr¨¦er les liaison entre les services 
+			//creer les liaison entre les services 
 			guardImpl.bindPlayerService(getPlayer());
 			guard2Impl.bindPlayerService(getPlayer());
 			getEngine().bindPlayerService(getPlayer());
@@ -161,19 +166,19 @@ public class test1 extends AbstractRunnerTest{
 	public void testInitPreItemCasNeg() throws Exception{
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
+			getEditscreen().Init(28, 16);
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
 			getEnvi().init(14, 14,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
 			//intialiser le joueur
 			getPlayer().init(getEnvi(), 2, 7);
 
-			//intialiser deux tr¨¦sors
-			getItem(item).init(getEnvi(), 15, 7, 0, ItemType.TREASURE);
-			getItem(item2).init(getEnvi(), 13, 6, 1, ItemType.TREASURE);
+			//intialiser deux tresors
+			getItem(item).init(getEnvi(), 0, 17, 0, ItemType.TREASURE);
+			getItem(item2).init(getEnvi(), 29, 6, 1, ItemType.TREASURE);
 
-			//cr¨¦er les liaison entre les services 
+			//creer les liaison entre les services 
 			getEngine().bindPlayerService(getPlayer());
 			getEngine().bindItemService(getItem(item));
 			getEngine().bindItemService(getItem(item2));
@@ -183,6 +188,7 @@ public class test1 extends AbstractRunnerTest{
 		fail("No exception thrown");
 	}
 
+	//Screen
 	@Test
 	public void testDigPreScreenCasPos() throws Exception{
 		try {
@@ -193,8 +199,7 @@ public class test1 extends AbstractRunnerTest{
 		}
 	}
 
-
-
+	
 	@Test
 	public void testDigPreScreenCasNeg() throws Exception{
 		try {
@@ -230,6 +235,7 @@ public class test1 extends AbstractRunnerTest{
 		fail("No exception thrown");
 	}
 
+	//Environnement
 	@Test
 	public void testgetCellContentPreEnviCasPos() throws Exception{
 		try {
@@ -251,6 +257,7 @@ public class test1 extends AbstractRunnerTest{
 		fail("No exception thrown");
 	}
 
+	//Editable Screen
 	@Test
 	public void testsetNaturePreEditableScreenCasPos() throws Exception{
 		try {
@@ -272,6 +279,7 @@ public class test1 extends AbstractRunnerTest{
 
 	}
 
+	//Guard 
 	@Test
 	public void testClimbLeftPreGuardCasNeg() throws Exception{
 		try {
@@ -301,10 +309,10 @@ public class test1 extends AbstractRunnerTest{
 	@Test
 	public void testInitEditableScreenTrans() {
 		try {
-			getEditscreen().Init(14, 14);
+			getEditscreen().Init(28, 16);
 			//EditableScreen
-			assertEquals(14, getEditscreen().getHeight());
-			assertEquals(14, getEditscreen().getHeight());
+			assertEquals(28, getEditscreen().getHeight());
+			assertEquals(16, getEditscreen().getHeight());
 
 			for (int x = 0; x < getEditscreen().getWidth(); x++) {
 				for (int y = 0; y < getEditscreen().getHeight(); y++) {
@@ -312,8 +320,8 @@ public class test1 extends AbstractRunnerTest{
 				} 
 			}
 
-			//Sp¨¦cifier tous les cases dans l'environnement
-			getBuildenvi().buildEnvi(getEditscreen());
+			//Specifier tous les cases dans l'environnement
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
 
 			//Test post-conditions	
 			for (int x = 0; x < getEditscreen().getWidth(); x++) {
@@ -337,7 +345,7 @@ public class test1 extends AbstractRunnerTest{
 		try {
 			testInitEditableScreenTrans() ;
 
-			getEnvi().init(14, 14, getEditscreen());
+			getEnvi().init(28, 16, getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 			for (int i = 0; i < getEnvi().getWidth(); i++) {
 				for (int j = 0; j < getEnvi().getHeight(); j++) {
@@ -389,7 +397,7 @@ public class test1 extends AbstractRunnerTest{
 	}	
 
 
-	//Player, d'ici on v¨¦rifie que les fonctions de caract¨¨re pour le joueur
+	//Player, d'ici on verifie que les fonctions de caractere pour le joueur
 	@Test
 	public void testGoLeftPlayerTrans() {
 		try {
@@ -688,7 +696,7 @@ public class test1 extends AbstractRunnerTest{
 
 						}
 					}
-					//si le joueur est ¨¤ sa droite
+					//si le joueur est a sa droite
 					else if(getGuard(guard).getWdt() < getGuard(guard).getTarget().getWdt()) {			
 						if((getGuard(guard).getTarget().getWdt()-getGuard(guard).getWdt())<Math.abs(getGuard(guard).getTarget().getHgt()-getGuard(guard).getHgt())) {
 							assertEquals(Move.RIGHT, getGuard(guard).getBehaviour());
@@ -766,7 +774,7 @@ public class test1 extends AbstractRunnerTest{
 
 						}
 					}
-					//si le joueur est ¨¤ sa droite
+					//si le joueur est a sa droite
 					else if(getGuard(guard2).getWdt() < getGuard(guard2).getTarget().getWdt()) {			
 						if((getGuard(guard2).getTarget().getWdt()-getGuard(guard2).getWdt())<Math.abs(getGuard(guard2).getTarget().getHgt()-getGuard(guard2).getHgt())) {
 							assertEquals(Move.RIGHT, getGuard(guard2).getBehaviour());
@@ -784,19 +792,19 @@ public class test1 extends AbstractRunnerTest{
 		}
 	}
 
-	//D'ici on teste que l'op¨¦ration climbright() pour la service guard
+	//D'ici on teste que l'operation climbright() pour la service guard
 	@Test
 	public void testClimbRightGuardTrans() {
 		try {
 			//checkInvriant
 			testInvariantGuardTrans();
-			//Apr¨¨s init, gaurd0 ¨¤(5,2)
-			//guard1 ¨¤ (0,7)
-			//le joueur ¨¤ la position (3,7), et il creuse ¨¤ gauche, (2,7) est un trou
+			//Apres init, gaurd0 a(5,2)
+			//guard1 a (0,7)
+			//le joueur a la position (3,7), et il creuse a gauche, (2,7) est un trou
 			getEngine().setCommand(Command.DIGL);
 			getEngine().control(1);
 
-			//Apr¨¨s il marche 2 step vers droit, maintenant il est ¨¤ (6,7)
+			//Apres il marche 2 step vers droit, maintenant il est a (6,7)
 			getEngine().setCommand(Command.RIGHT);
 			getEngine().control(1);
 
@@ -807,7 +815,7 @@ public class test1 extends AbstractRunnerTest{
 			getEngine().control(1);
 			//le guard0 est(7,2)
 			//le guard1 tombe dans la trou (2,7)
-			//pour tester si le garde grimebe ¨¤ droite.On modifie le temps de limite ¨¤ 1
+			//pour tester si le garde grimebe a droite.On modifie le temps de limite a 1
 
 			//post-condition
 			//guard1
@@ -855,7 +863,7 @@ public class test1 extends AbstractRunnerTest{
 		try {
 			//intialiser environnement
 			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
 			getEnvi().init(14, 14,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
@@ -863,7 +871,7 @@ public class test1 extends AbstractRunnerTest{
 			getGuard(guard).init(getEnvi(), 12, 13, 0);
 			getItem(item).init(getEnvi(), 13, 13, 0, ItemType.TREASURE);
 
-			//cr¨¦er les liaison entre les services 
+			//creer les liaison entre les services 
 			playerImpl.bindEngineService(getEngine());
 			guardImpl.bindPlayerService(getPlayer());
 			getEngine().bindPlayerService(getPlayer());
@@ -871,12 +879,13 @@ public class test1 extends AbstractRunnerTest{
 			guardImpl.bindEngineService(getEngine());
 			getEngine().bindItemService(getItem(item));
 
-			//le joueur va etre attap¨¦ par guard
+			//le joueur va etre attape par guard
 			getEngine().setCommand(Command.RIGHT);
 			getEngine().control(1);
+			
 			assertEquals(13, getPlayer().getWdt());
 			assertEquals(13, getPlayer().getHgt());
-
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -888,17 +897,17 @@ public class test1 extends AbstractRunnerTest{
 		try {
 			//intialiser environnement
 			getEditscreen().Init(14, 14);
-			getBuildenvi().buildEnvi(getEditscreen());
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
 			getEnvi().init(14, 14,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
-			//On d¨¦place le joueur ¨¤ premier case de EMP
-			//le guard est ¨¤ sa droite
+			//On deplace le joueur a premier case de EMP
+			//le guard est a sa droite
 			getPlayer().init(getEnvi(), 0, 2);
 			getGuard(guard).init(getEnvi(), 3, 2, 0);
 			getItem(item).init(getEnvi(), 2, 2, 0, ItemType.TREASURE);
 
-			//cr¨¦er les liaison entre les services 
+			//creer les liaison entre les services 
 			playerImpl.bindEngineService(getEngine());
 			guardImpl.bindPlayerService(getPlayer());
 			getEngine().bindPlayerService(getPlayer());
@@ -906,11 +915,11 @@ public class test1 extends AbstractRunnerTest{
 			guardImpl.bindEngineService(getEngine());
 			getEngine().bindItemService(getItem(item));
 
-			//le guard va prendre le tr¨¦sor
+			//le guard va prendre le tresor
 			getEngine().setCommand(Command.LEFT);
 			getEngine().control(1);
 
-			//le joueur va etre attap¨¦ par guard
+			//le joueur va etre attape par guard
 			getEngine().setCommand(Command.LEFT);
 			getEngine().control(1);
 
@@ -920,14 +929,14 @@ public class test1 extends AbstractRunnerTest{
 			assertEquals(1, getGuard(guard).getWdt());
 			assertEquals(2, getGuard(guard).getHgt());
 
-			//le case (1,2) va contenir le tr¨¦sor
+			//le case (1,2) va contenir le tresor
 			assertTrue(getGuard(guard).getEnvi().getCellContent(1, 2).contains(getItem(item)));
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 	}	
-	/*-----------S¨¦nario-----------------*/
+	/*-----------Senario-----------------*/
 	@Test
 	public void TestSenario1 () {
 		try {
@@ -938,12 +947,12 @@ public class test1 extends AbstractRunnerTest{
 			//position initiale de item1 est(1,7)
 			//position initiale de item2 est(13,6)
 			
-			//joueur marche 3 step ¨¤ droite
+			//joueur marche 3 step a droite
 			for (int i = 0; i < 5; i++) {
 				getEngine().setCommand(Command.RIGHT);
 				getEngine().control(1);
 			}
-			//creuse ¨¤ gauche
+			//creuse a gauche
 			for (int i = 0; i < 1; i++) {
 				getEngine().setCommand(Command.DIGL);
 				getEngine().control(1);
@@ -974,7 +983,7 @@ public class test1 extends AbstractRunnerTest{
 				getEngine().control(1);
 			}
 		
-			//le joueur a gagn¨¦
+			//le joueur a gagne
 			assertEquals(13, getPlayer().getWdt());
 			assertEquals(6, getPlayer().getHgt());
 			assertEquals(Status.Win, getEngine().getStatus());

@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 
+import facade.BuildEnvi;
 import impl.EngineImpl;
-import mains.BuildEnvi;
 import services.EditableScreen;
-import services.Engine;
 import services.Environment;
 import services.Guard;
 import services.Item;
 import services.Player;
-import services.Screen;
 
 public abstract class AbstractRunnerTest {
 	private Player player;

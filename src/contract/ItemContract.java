@@ -43,11 +43,11 @@ public class ItemContract extends ItemDecorator {
 			throw new PreconditionError("ItemContract init()==> //pre : id>=0 ");	
 		}
 
-//		//si id d'item existe d¨¦ja dans la liste d'item
+//		//si id d'item existe deja dans la liste d'item
 //		if(!getItemIdList().isEmpty()) {
 //			if (getItemIdList().contains(id)) {
 //				System.out.println("itemsdsd"+id);
-//				throw new PreconditionError("ItemContract init()==> //pre id d'item existe d¨¦ja");
+//				throw new PreconditionError("ItemContract init()==> //pre id d'item existe deja");
 //			}
 //		}
 		

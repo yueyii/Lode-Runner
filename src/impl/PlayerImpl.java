@@ -25,7 +25,7 @@ RequireEngineService{
 		return engine.NextCommand();
 	}
 
-	/** Operateur:d¨¦finir les pr¨¦dicats cet r¨¦utiliser dans
+	/** Operateur:definir les predicats cet reutiliser dans
 	 * 
 	 * GoDown(C) \def (Environment::CellNature(Envi(C),Wdt(C),Hgt(C)-1)) \in {HOL,EMP}
 	 * 		\and not exists Character c \in Environment::CellContent(Envi(C),Wdt(C),Hgt(C)-1))
@@ -99,7 +99,7 @@ RequireEngineService{
 					hole.init(getEnvi(), getWdt()-1, getHgt()-1, 0);
 					hole.getEnvi().Dig(getWdt()-1, getHgt()-1);
 					engine.bindHolesService(hole);
-					System.out.println("Player creuse ¨¤ gauche");
+					System.out.println("Player creuse a gauche");
 					System.out.println(hole.getEnvi().CellNature(getWdt()-1, getHgt()-1));
 				}
 			}
@@ -116,7 +116,7 @@ RequireEngineService{
 					Holes hole = new HolesImpl();
 					hole.init(getEnvi(), getWdt()+1, getHgt()-1, 0);
 					engine.bindHolesService(hole);
-					System.out.println("Player creuse ¨¤ droite");
+					System.out.println("Player creuse a droite");
 				}
 			}
 		}

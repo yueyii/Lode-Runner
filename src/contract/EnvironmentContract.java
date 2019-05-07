@@ -77,7 +77,7 @@ public class EnvironmentContract extends ScreenContract implements Environment {
 				}
 			}
 		}
-
+ 
 		for (int i = 0; i < getWidth(); i++) {
 			for (int j = 0; j < getHeight(); j++) {
 				if (!( CellNature(i,j)==Cell.EMP && 
