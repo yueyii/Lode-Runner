@@ -62,10 +62,6 @@ RequireEngineService{
 			}
 		}
 
-
-		//		if((getEnvi().CellNature(getWdt(), getHgt()-1)!=Cell.HOL)
-		//				&&(getEnvi().CellNature(getWdt(), getHgt()-1)!=Cell.EMP)) {
-		//	
 		if(tomber == false) {
 			if(NextCommand()==Command.DOWN) {
 				super.goDown();
@@ -93,7 +89,7 @@ RequireEngineService{
 					&&(getEnvi().CellNature(getWdt(), getHgt()-1)!=Cell.EMP))
 					||(!getEnvi().getCellContent(getWdt(), getHgt()-1).isEmpty())) {
 				if(getEnvi().CellNature(getWdt()-1, getHgt()-1)==Cell.PLT) {			
-					
+
 					//appeler holes  
 					Holes hole = new HolesImpl();
 					hole.init(getEnvi(), getWdt()-1, getHgt()-1, 0);
@@ -105,7 +101,7 @@ RequireEngineService{
 			}
 		}
 
-	
+
 		if(NextCommand()==Command.DIGR) {
 			if(((getEnvi().CellNature(getWdt(), getHgt()-1)!=Cell.HOL)
 					&&(getEnvi().CellNature(getWdt(), getHgt()-1)!=Cell.EMP))
@@ -117,6 +113,48 @@ RequireEngineService{
 					hole.init(getEnvi(), getWdt()+1, getHgt()-1, 0);
 					engine.bindHolesService(hole);
 					System.out.println("Player creuse a droite");
+				}
+			}
+		} 
+
+		
+		
+		if(engine.isPrepareToFight() && NextCommand()==Command.ATTACKLEFT) {
+			if (wdt!=0) {
+				if(getEnvi().CellNature(getWdt()-1,getHgt())!=Cell.PLT 
+						&& getEnvi().CellNature(getWdt()-1,getHgt())!=Cell.MTL) {
+
+					if ((getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD
+							|| getEnvi().CellNature(getWdt(), getHgt())==Cell.HDR 
+							|| (getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.PLT 
+							||getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.MTL 
+							||getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.LAD))
+
+							|| (!getEnvi().getCellContent(getWdt(),getHgt()-1).isEmpty())) {
+						//le joueur attaque 
+						engine.prepareToFight(getWdt()-1,getHgt());
+						System.out.println("Player attaque sa gauche");
+					}
+				}
+			} 
+		}
+
+		if(engine.isPrepareToFight() && NextCommand()==Command.ATTACKRIGHT) {
+			if (wdt!=getEnvi().getWidth()-1) {
+				if (getEnvi().CellNature(getWdt()+1,getHgt())!=Cell.MTL 
+						&& getEnvi().CellNature(getWdt()+1,getHgt())!=Cell.PLT) {
+
+					if ((getEnvi().CellNature(getWdt(),getHgt())==Cell.LAD 
+							|| getEnvi().CellNature(getWdt(),getHgt())==Cell.HDR 
+							|| (getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.PLT
+							|| getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.MTL 
+							|| getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.LAD))
+							|| (!getEnvi().getCellContent(getWdt(),getHgt()-1).isEmpty())) {
+
+						//le joueur attaque 
+						engine.prepareToFight(getWdt()+1,getHgt());
+						System.out.println("Player attaque sa droite"); 
+					}
 				}
 			}
 		}

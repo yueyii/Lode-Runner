@@ -24,7 +24,7 @@ public class ItemContract extends ItemDecorator {
 			throw new InvariantError("ItemContract==> \\inv 0<getItemCol()<getEnvi().getWidth() ");	
 		}
 		
-		if(getNature()!=ItemType.TREASURE) {
+		if(getNature()!=ItemType.TREASURE && getNature()!=ItemType.ARMS && getNature()!=ItemType.SUPER  ) {
 			throw new InvariantError("ItemContract==> \\getNature()==treasure ");	
 		}
 	}
@@ -51,8 +51,8 @@ public class ItemContract extends ItemDecorator {
 //			}
 //		}
 		
-		if(nature !=ItemType.TREASURE) {
-			throw new InvariantError("ItemContract ==> \\getNature()==treasure ");	
+		if(nature !=ItemType.TREASURE && nature!= ItemType.ARMS && nature!=ItemType.SUPER ) {
+			throw new InvariantError("ItemContract ==> \\getNature()==treasure || getNature()==arme");	
 		}
 		
 		getDelegate().init(screen, x, y, id, nature);

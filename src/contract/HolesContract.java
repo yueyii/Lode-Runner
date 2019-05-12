@@ -26,15 +26,15 @@ public class HolesContract extends HolesDecorator {
 			throw new InvariantError("HolesContract ==> \\inv getNature()!=Hol ");	
 		}
 		
-		if(getTime()<0 || getTime()>15) {
+		if(getTime()<0 || getTime()>10) {
 			throw new InvariantError("HolesContract ==> \\inv 0<=getTime()<16");		
-		}
+		} 
 
 	}
 	
 	@Override
 	public void init(Screen screen, int x, int y, int t) {
-		if(t<0 || t>15) {
+		if(t<0 || t>10) {
 			throw new PreconditionError("HolesContract init() ==> //pre : time>=0 ");	
 		}
 		

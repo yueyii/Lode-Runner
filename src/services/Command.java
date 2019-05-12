@@ -7,5 +7,7 @@ public enum Command {
 	UP,
 	NEUTRAL,
 	DIGL,
-	DIGR;
+	DIGR,
+	ATTACKRIGHT,
+	ATTACKLEFT;
 }

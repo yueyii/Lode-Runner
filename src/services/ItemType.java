@@ -1,5 +1,7 @@
 package services;
 
 public enum ItemType {
-	TREASURE;
+	TREASURE,
+	ARMS,
+	SUPER;
 }

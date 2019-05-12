@@ -14,6 +14,8 @@ import services.Screen;
 
 public class GuardContract extends CharacterContract implements Guard{
 
+	private int timeLimit = 5;
+	
 	public GuardContract(Guard delegate) {
 		super(delegate); 
 	}
@@ -373,9 +375,9 @@ public class GuardContract extends CharacterContract implements Guard{
 
 		getDelegate().Step();
 
-		if(time_pre<5) {
-			if(getEnvi().CellNature(wdt_pre, hgt_pre)==Cell.HOL) {
-				if(getTimeInhole()!=time_pre+1) {
+		if(time_pre< timeLimit) {
+			if(getEnvi().CellNature(wdt_pre, hgt_pre)==Cell.HOL && getTimeInhole() < timeLimit) {
+				if(getTimeInhole()!=time_pre+1) { 
 					throw new PostconditionError("GuardContract Step() ==> //post:le temps n'augmente pas");
 				}	
 			}

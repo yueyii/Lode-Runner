@@ -20,7 +20,6 @@ public class ItemImpl implements Item {
 		wdt=0;
 		envi=null;
 	}
-
 	
 	@Override
 	public void init(Screen screen, int x, int y, int id, ItemType nature) {
@@ -57,7 +56,7 @@ public class ItemImpl implements Item {
 		return hgt;
 	}
 
-	@Override
+	@Override 
 	public int getItemCol() {
 		return wdt;
 	}

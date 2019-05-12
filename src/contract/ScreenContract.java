@@ -73,13 +73,13 @@ public class ScreenContract extends ScreenDecorator implements Screen {
 	}
 
 	/** Operateur: transforme une case PLT en case HOL
-	  *  pre: 0 <= x < getHeight() and 0 <= y < getWidth() and CellNature(x,y) = PLT
+	  *  pre: 0 <= x < getWidth() and 0 <= y < getHeight() and CellNature(x,y) = PLT
 	  *  post: CellNature(x,y) = HOL
 	  *  post: \forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) \with (u!=x \or v!=y) \implies CellNature(u,v)=CellNature(u,v)@pre
 	  */
 	 public void Dig(int x, int y) {
 			//1 Pre-condition
-			if(x<0 || x>=getHeight() || y<0 || y>=getWidth()) {
+			if(x<0 || x>=getWidth() || y<0 || y>=getHeight()) {
 				throw new PreconditionError("ScreenContract Dig(int x, int y) ==> \\pre  0 <= x < getHeight() and 0 <= y < getWidth() ");
 			}
 			if (CellNature(x,y)!=Cell.PLT) {
@@ -120,13 +120,13 @@ public class ScreenContract extends ScreenDecorator implements Screen {
 	 }
 
 	/** Operateur: transforme une case HOL en case PLT
-	  *  pre: 0 <= x < getHeight() and 0 <= y < getWidth() and CellNature(x,y) = HOL
+	  *  pre: 0 <= x < getWidth() and 0 <= y < getHeight() and CellNature(x,y) = HOL
 	  *  post: CellNature(x,y) = PLT
 	  *  post: \forall x (x \in {0...width()-1}) and \forall y (y \in {0...Height()-1}) \with (u!=x \or v!=y) \implies CellNature(u,v)=CellNature(u,v)@pre
 	  */
 	 public void Fill(int x, int y) {
 			//1 Pre-condition
-			if(x<0 || x>=getHeight() || y<0 || y>=getWidth()) {
+			if(x<0 || x>=getWidth() || y<0 || y>=getHeight()) {
 				throw new PreconditionError("ScreenContract Fill(int x, int y)==> \\pre  0 <= x < getHeight() and 0 <= y < getWidth() ");
 			}
 			if (CellNature(x,y)!=Cell.HOL) {

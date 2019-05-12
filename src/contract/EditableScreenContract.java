@@ -35,7 +35,7 @@ public class EditableScreenContract extends ScreenContract implements EditableSc
 					throw new InvariantError("EditableScreenContract ==> \\inv CellNature(i,0)==Cell.MTL isPlayable() ");
 				}
 			}
-
+ 
 			for (int i = 0; i < getWidth(); i++) {
 				for (int j = 0; j < getHeight(); j++) {
 					if (CellNature(i, j) == Cell.HOL) {

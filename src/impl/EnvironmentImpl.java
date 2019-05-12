@@ -17,7 +17,6 @@ RequireEngineService{
 	HashSet<CellContent> cellContentList;
 	EditableScreen edit;
 	Cell cell;
-	protected Cell cellList[][]; 
 
 	public EnvironmentImpl() {
 		cellContentList = new HashSet<>();
@@ -41,7 +40,7 @@ RequireEngineService{
 	@Override
 	public void Fill(int x, int y) {
 		edit.Fill(x, y); 
-	}
+	} 
 
 
 	@Override
@@ -52,7 +51,7 @@ RequireEngineService{
 
 	@Override
 	public HashSet<CellContent> getCellContent(int x, int y) {
-		cellContentList.clear();
+		cellContentList.clear(); 
 		for (Entry<CellContent, Pair<Integer, Integer>> entry 
 				: engine.getCellContent().entrySet()) {
 			if(entry.getValue().getKey()==x && entry.getValue().getValue()==y) {

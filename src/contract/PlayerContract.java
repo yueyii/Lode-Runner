@@ -84,9 +84,7 @@ public class PlayerContract extends CharacterContract implements Player {
 					&& (getEnvi().CellNature(wdt_pre, hgt_pre-1)!=Cell.EMP))
 					|| !getEnvi().getCellContent(wdt_pre, hgt_pre-1).isEmpty()){
 				if(getEnvi().CellNature(wdt_pre-1, hgt_pre-1)==Cell.PLT) {
-					if(getEnvi().CellNature(wdt_pre-1, hgt_pre-1)!=Cell.HOL) {
 						throw new PostconditionError("PlayerContract Step() ==> //post:DIGL Environment::CellNature(Envi(C),Wdt(C)-1,Hgt(C)-1))= HOL");
-					}
 				}
 			}
 		}
@@ -100,7 +98,7 @@ public class PlayerContract extends CharacterContract implements Player {
 						throw new PostconditionError("PlayerContract Step() ==> //post:DIGR Environment::CellNature(Envi(C),Wdt(C)+1,Hgt(C)-1))= HOL");
 					}
 				}
-			}
+			} 
 		}
 	}
 

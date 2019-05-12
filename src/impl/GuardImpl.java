@@ -17,11 +17,10 @@ RequirePlayerService, RequireEngineService{
 	private Player player;
 	private int id;
 	private int time;
+	private int timeLimit=5;
 	private Move move;
 	private EngineImpl engine;
-	//Le temps de limite de garde grimper
-	final int timeLimit = 1;
-	
+
 	public GuardImpl() {
 		id=0;
 		time=0;
@@ -71,7 +70,7 @@ RequirePlayerService, RequireEngineService{
 
 			//si le joueur est en dessous de lui
 			else if(getHgt() > getTarget().getHgt()) {
-				this.move=Move.DOWN;
+				this.move=Move.DOWN; 
 			}
 			else if(getWdt() < getTarget().getWdt()) {
 				this.move=Move.RIGHT;
@@ -96,34 +95,21 @@ RequirePlayerService, RequireEngineService{
 				|| (!getEnvi().getCellContent(getWdt(),getHgt()-1).isEmpty())) {
 
 			if(getWdt() > getTarget().getWdt()) {
-				//				if(getEnvi().CellNature(getWdt()-1,getHgt())!=Cell.LAD) {
-				//					this.move=Move.RIGHT;
-				//				}
-				//				else {
 				this.move=Move.LEFT;
-				//				}
-				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa gauche ==> Left");
 			}
 
 			//si le joueur est a sa droite
 			else if(getWdt() < getTarget().getWdt()) {	
-				//				if(getEnvi().CellNature(getWdt()+1,getHgt())!=Cell.LAD) {
-				//					this.move=Move.LEFT;
-				//				}
-				//				else {
 				this.move=Move.RIGHT;
-				//				}
-				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa droite  ==> Right");
 			}
 
 			else {
 				this.move=Move.NEUTRAL;
-				//				System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre ==> Neutral");
 			}
 			return move;
 		}
-		
-		
+
+
 		else if ((getEnvi().CellNature(getWdt(), getHgt())==Cell.LAD)&&
 				(getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.PLT
 				|| getEnvi().CellNature(getWdt(),getHgt()-1)==Cell.MTL 
@@ -132,7 +118,6 @@ RequirePlayerService, RequireEngineService{
 			if(getHgt() < getTarget().getHgt()) {
 				if((getTarget().getHgt()-getHgt())<Math.abs(getTarget().getWdt()-getWdt())) {
 					this.move=Move.UP;
-					//					System.out.println("number"+getGardeId()+"garde dans une echelles ==> Up");
 				} 
 			}
 
@@ -140,14 +125,12 @@ RequirePlayerService, RequireEngineService{
 			else if(getHgt() > getTarget().getHgt()) {
 				if((getHgt()-getTarget().getHgt())<Math.abs(getTarget().getWdt()-getWdt())) {
 					this.move=Move.DOWN;
-					//					System.out.println("number"+getGardeId()+"garde dans une echelles ==> Down");
 				}
 			}
 
 			else if(getWdt() > getTarget().getWdt()) {	
 				if((getWdt()-getTarget().getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 					this.move=Move.LEFT;
-					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa gauche ==> Left");
 				}
 			}
 
@@ -155,13 +138,11 @@ RequirePlayerService, RequireEngineService{
 			else if(getWdt() < getTarget().getWdt()) {			
 				if((getTarget().getWdt()-getWdt())<Math.abs(getTarget().getHgt()-getHgt())) {
 					this.move=Move.RIGHT;
-					//					System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre,joueur a sa droite  ==> Right");
 				}	
 			}
 
 			else {
 				this.move=Move.NEUTRAL;
-				//System.out.println("number"+getGardeId()+"garde sur rail/sur case non-libre ==> Neutral");
 			}
 		}
 		return null;
@@ -249,24 +230,25 @@ RequirePlayerService, RequireEngineService{
 	@Override
 	public void Step() {
 		boolean tomber= false;
-		if((getEnvi().CellNature(getWdt(), getHgt()-1)==Cell.HOL)
-				||(getEnvi().CellNature(getWdt(), getHgt()-1)==Cell.EMP)) {
-			if(getEnvi().getCellContent(getWdt(), getHgt()-1).isEmpty()) {
-				if(getEnvi().CellNature(getWdt(), getHgt())!=Cell.LAD 
-						&& getEnvi().CellNature(getWdt(), getHgt())!=Cell.HDR) {
-					System.out.println("Le garde "+getGardeId()+ " tombe");
-					super.goDown();
-					tomber=true;
-					engine.setToPutDown(true);
+		if(getEnvi().CellNature(getWdt(), getHgt())!=Cell.HOL){
+			if((getEnvi().CellNature(getWdt(), getHgt()-1)==Cell.HOL)
+					||(getEnvi().CellNature(getWdt(), getHgt()-1)==Cell.EMP)) {
+				if(getEnvi().getCellContent(getWdt(), getHgt()-1).isEmpty()) {
+					if(getEnvi().CellNature(getWdt(), getHgt())!=Cell.LAD 
+							&& getEnvi().CellNature(getWdt(), getHgt())!=Cell.HDR) {
+						System.out.println("Le garde "+getGardeId()+ " tombe");
+						super.goDown();
+						tomber=true;
+						engine.setToPutDown(true);
+					}
 				}
 			}
 		}
-
 		if(getEnvi().CellNature(getWdt(), getHgt())==Cell.HOL) {
-			if(getTimeInhole()<timeLimit) {	
+			if(getTimeInhole()< timeLimit) {	
 				this.time=this.time+1;
-				System.out.println("temps +1");
-			}
+				System.out.println("temps +1, temps dans le trou est " + getTimeInhole());
+			} 
 
 			else if(getTimeInhole()==timeLimit) {
 				if(getBehaviour()==Move.LEFT) {
@@ -282,7 +264,7 @@ RequirePlayerService, RequireEngineService{
 				}
 			}
 		}
-
+ 
 		else if(tomber==false){
 			if(getBehaviour()==Move.LEFT) {
 				super.goLeft();

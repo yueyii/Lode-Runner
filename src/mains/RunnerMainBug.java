@@ -1,15 +1,15 @@
 package mains;
 
-import facade.GameFacadeCorrect;
+import facade.GameFacadeBug;
 import impl.EngineImpl;
 import services.Command;
 import services.Status;
 
-public class RunnerMainCorrect {
+public class RunnerMainBug {
 
 	public static void main(String[] args) {
 
-		GameFacadeCorrect gameFacade=new GameFacadeCorrect();
+		GameFacadeBug gameFacade=new GameFacadeBug();
 		EngineImpl engine=gameFacade.getEngine();
 		
 		//Parce qu'on n'a pas niveau 3

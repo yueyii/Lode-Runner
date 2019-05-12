@@ -23,7 +23,7 @@ public class BuildEnvi {
 				{	if(line[k]=='0') {
 					editableContract.setNature(k, editableContract.getHeight()-1-i, Cell.EMP);	
 					}
-					else if(line[k]=='1') {
+					else if(line[k]=='1') { 
 						editableContract.setNature(k, editableContract.getHeight()-1-i, Cell.MTL);
 					}
 					else if(line[k]=='2') {
@@ -37,7 +37,7 @@ public class BuildEnvi {
 					}
 				}
 			}
-		}
+		} 
 		catch (IOException ex) {}
 		finally
 		{

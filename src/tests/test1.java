@@ -34,7 +34,8 @@ import services.Player;
 import services.Status;
 /*
  * 
- * 
+ * 1.Test preconditions : 
+ * 2 Tests transitions
  * 
  * 
  * */
@@ -55,7 +56,7 @@ public class test1 extends AbstractRunnerTest{
 	Item item = new ItemContract(itemImpl);
 
 	ItemImpl item2Impl = new ItemImpl();
-	Item item2 = new ItemContract(item2Impl);
+	Item item2 = new ItemContract(item2Impl); 
 
 	EnvironmentImpl enviImpl = new EnvironmentImpl();
 	Environment envi= new EnvironmentContract(enviImpl);
@@ -193,7 +194,7 @@ public class test1 extends AbstractRunnerTest{
 	public void testDigPreScreenCasPos() throws Exception{
 		try {
 			this.testInitPreCasPos();
-			getEnvi().Dig(4, 6);
+			getEnvi().Dig(4, 5);
 		}catch(Exception e){
 			e.printStackTrace();	 
 		}
@@ -216,8 +217,8 @@ public class test1 extends AbstractRunnerTest{
 	public void testFillPreScreenCasPos() throws Exception{
 		try {
 			this.testInitPreCasPos();
-			getEnvi().Dig(4, 6);
-			getEnvi().Fill(4, 6);
+			getEnvi().Dig(4, 5);
+			getEnvi().Fill(4, 5);
 		}catch(Exception e){
 			e.printStackTrace();	 
 		}
@@ -311,7 +312,7 @@ public class test1 extends AbstractRunnerTest{
 		try {
 			getEditscreen().Init(28, 16);
 			//EditableScreen
-			assertEquals(28, getEditscreen().getHeight());
+			assertEquals(28, getEditscreen().getWidth());
 			assertEquals(16, getEditscreen().getHeight());
 
 			for (int x = 0; x < getEditscreen().getWidth(); x++) {
@@ -411,20 +412,20 @@ public class test1 extends AbstractRunnerTest{
 			HashSet<CellContent> cLeft = getEnvi().getCellContent(getPlayer().getWdt()-1,getPlayer().getHgt());
 
 			//post condition
-			assertEquals(7, getPlayer().getHgt());
+			assertEquals(9, getPlayer().getHgt());
 
 			if (CellLeft==Cell.MTL || CellLeft==Cell.PLT) {
-				assertEquals(2, getPlayer().getWdt());
+				assertEquals(23, getPlayer().getWdt());
 			}
 			if (cell!=Cell.LAD && cell!=Cell.HDR) {
 				if (CellDown!=Cell.PLT && CellDown!=Cell.MTL && CellDown!=Cell.LAD) {
 					if (cDown.isEmpty()) {
-						assertEquals(2, getPlayer().getWdt());
+						assertEquals(23, getPlayer().getWdt());
 					}
 				}
 			} 
 			if (!cLeft.isEmpty()) {
-				assertEquals(2, getPlayer().getWdt());
+				assertEquals(23, getPlayer().getWdt());
 			}
 
 			if (CellLeft!=Cell.MTL && CellLeft!=Cell.PLT) {
@@ -432,7 +433,7 @@ public class test1 extends AbstractRunnerTest{
 						|| (CellDown==Cell.PLT ||CellDown==Cell.MTL ||CellDown==Cell.LAD)
 						|| (!cDown.isEmpty())) {
 					if (cLeft.isEmpty()) {
-						assertEquals(2, getPlayer().getWdt());
+						assertEquals(22, getPlayer().getWdt());
 					}
 				}
 			}
@@ -454,32 +455,32 @@ public class test1 extends AbstractRunnerTest{
 			HashSet<CellContent> cRight = getEnvi().getCellContent(getPlayer().getWdt()+1,getPlayer().getHgt());
 
 			// PostCondition
-			assertEquals(7, getPlayer().getHgt());
+			assertEquals(9, getPlayer().getHgt());
 
-			if (3==(getEnvi().getWidth()-1)) {
-				assertEquals(3, getPlayer().getWdt());
+			if (23==(getEnvi().getWidth()-1)) {
+				assertEquals(23, getPlayer().getWdt());
 			}
 			if (CellRight==Cell.MTL || CellRight==Cell.PLT) {
-				assertEquals(3, getPlayer().getWdt());
+				assertEquals(23, getPlayer().getWdt());
 			}
 			if (cell!=Cell.LAD && cell!=Cell.HDR) {
 				if (CellDown!=Cell.PLT && CellDown!=Cell.MTL && CellDown!=Cell.LAD) {
 					if (cDown.isEmpty()) {
-						assertEquals(3, getPlayer().getWdt());
+						assertEquals(23, getPlayer().getWdt());
 					}
 				}
 			}
 			if (!cRight.isEmpty()) {
-				assertEquals(3, getPlayer().getWdt());
+				assertEquals(23, getPlayer().getWdt());
 			}
 
-			if (3!=getEnvi().getWidth()-1) {
+			if (23!=getEnvi().getWidth()-1) {
 				if (CellRight!=Cell.MTL && CellRight!=Cell.PLT) {
 					if ((cell==Cell.LAD || cell==Cell.HDR) 
 							|| (CellDown==Cell.PLT ||CellDown==Cell.MTL ||CellDown==Cell.LAD)
 							|| (!cDown.isEmpty())) {
 						if (cRight.isEmpty()) {
-							assertEquals(4, getPlayer().getWdt());
+							assertEquals(24, getPlayer().getWdt());
 						}
 					}
 				}
@@ -502,7 +503,7 @@ public class test1 extends AbstractRunnerTest{
 			HashSet<CellContent> cUp = getEnvi().getCellContent(getPlayer().getWdt(),getPlayer().getHgt()+1);
 
 			//PostCondition
-			assertEquals(3, getPlayer().getWdt());
+			assertEquals(23, getPlayer().getWdt());
 
 			if (7==(getEnvi().getHeight()-1)){
 				assertEquals(7, getPlayer().getHgt());
@@ -543,7 +544,18 @@ public class test1 extends AbstractRunnerTest{
 	@Test
 	public void testGoDownPlayerTrans() {
 		try {
-			testInitPreCasPos();
+			getEditscreen().Init(28, 16);
+			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
+			enviImpl.bindEngineService(getEngine());
+
+			//intialiser le joueur
+			getPlayer().init(getEnvi(), 20, 9);
+			
+			//creer les liaison entre les services 
+			playerImpl.bindEngineService(getEngine());
+			getEngine().bindPlayerService(getPlayer());
+
 			getPlayer().goDown();
 
 			Cell CellDown = getEnvi().CellNature(getPlayer().getWdt(),getPlayer().getHgt()-1);
@@ -551,10 +563,10 @@ public class test1 extends AbstractRunnerTest{
 			HashSet<CellContent> cDown = getEnvi().getCellContent(getPlayer().getWdt(),getPlayer().getHgt()-1);
 
 			//6 PostCondition
-			assertEquals(3, getPlayer().getWdt());
+			assertEquals(20, getPlayer().getWdt());
 
 			if (CellDown==Cell.MTL || CellDown==Cell.PLT) {
-				assertEquals(7, getPlayer().getHgt());
+				assertEquals(9, getPlayer().getHgt());
 			}
 
 			if (cell!=Cell.LAD && cell!=Cell.HDR) {
@@ -573,7 +585,7 @@ public class test1 extends AbstractRunnerTest{
 			if (CellDown!=Cell.MTL && CellDown!=Cell.PLT) {
 				if ((CellDown==Cell.EMP||CellDown==Cell.LAD||CellDown==Cell.HDR||CellDown==Cell.HOL) ) {
 					if (cDown.isEmpty()) {
-						assertEquals(6, getPlayer().getHgt());
+						assertEquals(8, getPlayer().getHgt());
 					}
 				}
 			}
@@ -796,10 +808,21 @@ public class test1 extends AbstractRunnerTest{
 	@Test
 	public void testClimbRightGuardTrans() {
 		try {
+//			//intialiser le joueur
+//			tPlayer : 23, 9);
+//
+//			//initialiser deux gardes
+//			getGuard(guard).init(getEnvi(), 0, 6, 0);
+//			getGuard(guard2).init(getEnvi(), 6, 3, 1);
+//
+//			//intialiser deux tresors
+//			getItem(item).init(getEnvi(), 3, 14, 0, ItemType.TREASURE);
+//			getItem(item2).init(getEnvi(), 8, 3, 1, ItemType.TREASURE);
+			
 			//checkInvriant
 			testInvariantGuardTrans();
-			//Apres init, gaurd0 a(5,2)
-			//guard1 a (0,7)
+			//Apres init, gaurd0 a(0,6)
+			//guard1 a (6,3)
 			//le joueur a la position (3,7), et il creuse a gauche, (2,7) est un trou
 			getEngine().setCommand(Command.DIGL);
 			getEngine().control(1);
@@ -808,14 +831,11 @@ public class test1 extends AbstractRunnerTest{
 			getEngine().setCommand(Command.RIGHT);
 			getEngine().control(1);
 
-			getEngine().setCommand(Command.RIGHT);
+			getEngine().setCommand(Command.RIGHT); 
 			getEngine().control(1);
 
 			getEngine().setCommand(Command.RIGHT);
 			getEngine().control(1);
-			//le guard0 est(7,2)
-			//le guard1 tombe dans la trou (2,7)
-			//pour tester si le garde grimebe a droite.On modifie le temps de limite a 1
 
 			//post-condition
 			//guard1
@@ -828,8 +848,8 @@ public class test1 extends AbstractRunnerTest{
 			//guard2
 			if(getEnvi().CellNature(1, 8)==Cell.MTL
 					||getEnvi().CellNature(1, 8)==Cell.PLT) {
-				assertEquals(0, getGuard(guard2).getWdt());
-				assertEquals(7, getGuard(guard2).getHgt());
+				assertEquals(9, getGuard(guard2).getWdt());
+				assertEquals(4, getGuard(guard2).getHgt());
 			}
 
 			//guard1
@@ -862,14 +882,14 @@ public class test1 extends AbstractRunnerTest{
 	public void TestEtatsRemarquables1 () {
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
+			getEditscreen().Init(28, 16);
 			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
-			getEnvi().init(14, 14,getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
-			getPlayer().init(getEnvi(), 13, 13);
-			getGuard(guard).init(getEnvi(), 12, 13, 0);
-			getItem(item).init(getEnvi(), 13, 13, 0, ItemType.TREASURE);
+			getPlayer().init(getEnvi(), 27, 12);
+			getGuard(guard).init(getEnvi(), 24, 12, 0);
+			getItem(item).init(getEnvi(), 24, 9, 0, ItemType.TREASURE);
 
 			//creer les liaison entre les services 
 			playerImpl.bindEngineService(getEngine());
@@ -883,8 +903,8 @@ public class test1 extends AbstractRunnerTest{
 			getEngine().setCommand(Command.RIGHT);
 			getEngine().control(1);
 			
-			assertEquals(13, getPlayer().getWdt());
-			assertEquals(13, getPlayer().getHgt());
+			assertEquals(27, getPlayer().getWdt()); 
+			assertEquals(12, getPlayer().getHgt());
 			
 		}
 		catch(Exception e){
@@ -896,9 +916,9 @@ public class test1 extends AbstractRunnerTest{
 	public void TestEtatsRemarquables2 () {
 		try {
 			//intialiser environnement
-			getEditscreen().Init(14, 14);
+			getEditscreen().Init(28, 16);
 			getBuildenvi().buildEnvi2(getEngine().getlevel(), getEditscreen());
-			getEnvi().init(14, 14,getEditscreen());
+			getEnvi().init(28, 16,getEditscreen());
 			enviImpl.bindEngineService(getEngine());
 
 			//On deplace le joueur a premier case de EMP
@@ -941,57 +961,112 @@ public class test1 extends AbstractRunnerTest{
 	public void TestSenario1 () {
 		try {
 			testInitPreCasPos();
-			//position initiale de joueur est(3,7)
-			//position initiale de garde1 est(5,2)
-			//position initiale de garde2 est(0,7)
-			//position initiale de item1 est(1,7)
-			//position initiale de item2 est(13,6)
-			
+
 			//joueur marche 3 step a droite
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 2; i++) {
 				getEngine().setCommand(Command.RIGHT);
 				getEngine().control(1);
 			}
 			//creuse a gauche
-			for (int i = 0; i < 1; i++) {
-				getEngine().setCommand(Command.DIGL);
-				getEngine().control(1);
-			}
-		
-			for (int i = 0; i < 7; i++) {
-				getEngine().setCommand(Command.RIGHT);
-				getEngine().control(1);
-			}
-			
-			for (int i = 0; i < 1; i++) {
-				getEngine().setCommand(Command.DOWN);
-				getEngine().control(1);
-			}
-		
-			for (int i = 0; i < 3; i++) {
-				getEngine().setCommand(Command.RIGHT);
-				getEngine().control(1);
-			}
-
-			for (int i = 0; i < 3; i++) {
-				getEngine().setCommand(Command.LEFT);
-				getEngine().control(1);
-			}
-			
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 5; i++) {
 				getEngine().setCommand(Command.UP);
 				getEngine().control(1);
 			}
 		
+			for (int i = 0; i < 19; i++) {
+				getEngine().setCommand(Command.LEFT);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 2; i++) {
+				getEngine().setCommand(Command.UP);
+				getEngine().control(1);
+			}
+		
+			for (int i = 0; i < 5; i++) {
+				getEngine().setCommand(Command.LEFT);
+				getEngine().control(1);
+			}
+
+			for (int i = 0; i < 1; i++) {
+				getEngine().setCommand(Command.DIGR);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 1; i++) {
+				getEngine().setCommand(Command.RIGHT);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 6; i++) {
+				getEngine().setCommand(Command.NEUTRAL);
+				getEngine().control(1);
+			}
+		
 			//le joueur a gagne
-			assertEquals(13, getPlayer().getWdt());
-			assertEquals(6, getPlayer().getHgt());
-			assertEquals(Status.Win, getEngine().getStatus());
+			assertEquals(15, getPlayer().getWdt());
+			assertEquals(7, getPlayer().getHgt());
+			assertEquals(Status.Playing, getEngine().getStatus());
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
+	@Test
+	public void TestSenario2 () {
+		try {
+			testInitPreCasPos();
+
+			//joueur marche 3 step a droite
+			for (int i = 0; i < 3; i++) {
+				getEngine().setCommand(Command.LEFT);
+				getEngine().control(1);
+			}
+			//creuse a gauche
+			for (int i = 0; i < 4; i++) {
+				getEngine().setCommand(Command.DOWN);
+				getEngine().control(1);
+			}
+		
+			for (int i = 0; i < 4; i++) {
+				getEngine().setCommand(Command.LEFT);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 1; i++) {
+				getEngine().setCommand(Command.DIGL);
+				getEngine().control(1);
+			}
+		
+			for (int i = 0; i < 3; i++) {
+				getEngine().setCommand(Command.NEUTRAL);
+				getEngine().control(1);
+			}
+
+			for (int i = 0; i < 1; i++) {
+				getEngine().setCommand(Command.DIGL);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 1; i++) {
+				getEngine().setCommand(Command.RIGHT);
+				getEngine().control(1);
+			}
+			
+			for (int i = 0; i < 6; i++) {
+				getEngine().setCommand(Command.NEUTRAL);
+				getEngine().control(1);
+			}
+		
+			//le joueur a gagne
+			assertEquals(23, getPlayer().getWdt());
+			assertEquals(9, getPlayer().getHgt());
+			assertEquals(Status.Playing, getEngine().getStatus());
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -2,7 +2,6 @@ package services;
 
 import java.util.HashSet;
 
-import javafx.util.Pair;
 import services.Screen;
 
 public interface Environment extends Screen {

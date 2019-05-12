@@ -1,5 +1,5 @@
 package services;
-
+import services.Cell;
 import services.Screen;
 
 public interface EditableScreen extends Screen{

@@ -1,14 +1,15 @@
 <project name="cps_projet" default="compile" basedir=".">
     <description>
-       Fichier de construction pour l'exemple Bridge
+       Fichier de construction pour le projet LodeRunner
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="build"/>
+  <property name="jars" location="jars"/>
 
   <!-- METTRE ICI LE NOM DU BINOME -->
-  <property name="nom1" value="WANG Yueyi"/>
-  <property name="nom2" value="WANG Hongxing"/>
+  <property name="nom1" value="wang yueyi"/>
+  <property name="nom2" value="wang hong xing"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -20,44 +21,38 @@
   <target name="compile" depends="init"
         description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac debug="true" srcdir="${src}" excludes="" destdir="${build}" includeantruntime="false" />
+    <javac debug="true" classpath="${jars}/junit.jar" srcdir="${src}" excludes="" destdir="${build}" includeantruntime="false" />
   </target>
 
-  <target name="runMain" depends="compile"
-          description="run application in release mode">
-    <echo>================ Run Object Main ================</echo>
-    <java classname="cps_projet.src.mains.RunnerMain1"
-          classpath="${build}">
-    </java>
-  </target>
+	  <target name="rungame" depends="compile"
+	          description="run the main of the program">
+	    <echo>================ Run Object Main ================</echo>
+	    <java classname="cps_projet.mains.RunnerMainCorrect"
+	          classpath="${build}">
+	    </java>
+	  </target>
+		
+  <target name="test1" depends="compile"
+          description="test of ScreenService">
+    <echo>================ Run screen test ================</echo>
+    <junit printsummary="yes">
+      <classpath>
+        <pathelement location="${build}"/>
+        <pathelement location="${jars}/junit.jar"/>
+      </classpath>
 
-  <target name="runBugMain" depends="compile"
-          description="run application in test mode">
-    <echo>================ Run Object Main ================</echo>
-    <java classname="cps_projet.src.mains.RunnerBugMain2"
-          classpath="${build}">
-    </java>
+      <formatter type="plain"/>
+
+      <test name="cps_projet.tests.test1" outfile="report1"/>
+
+    </junit>
   </target>
 	
-  <target name="JunitTest1" depends="compile"
-	          description="test of first implementation">
-	  <echo>================ Run first test ================</echo>
-	  <junit printsummary="yes">
-	      <classpath>
-	        <pathelement location="${build}"/>
-	        <pathelement location="${jars}/junit.jar"/>
-	      </classpath>
-
-	      <formatter type="plain"/>
-
-	      <test name="cps_projet.src.tests.test1" outfile="report1"/>
-
-	    </junit>
-	  </target>
+		
   <target name="dist" depends="init,clean"
         description="Generer la distribution" >
     <!-- tout mettre dans l'archive -->
-    <jar basedir=".." jarfile="../cps_projet-${nom1}-${nom2}-${DSTAMP}.jar"
+    <jar basedir=".." jarfile="../LodeRunner-${nom1}-${nom2}-${DSTAMP}.jar"
     includes="LodeRunner/**/*" excludes="**/CVS"/>
   </target>
 

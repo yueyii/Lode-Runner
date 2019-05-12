@@ -5,7 +5,7 @@ import services.Environment;
 import services.Holes;
 import services.Screen;
 
-public class HolesImpl implements Holes {
+public class HolesImpl implements Holes { 
 	protected int hgt;
 	protected int wdt;
 	protected int time;

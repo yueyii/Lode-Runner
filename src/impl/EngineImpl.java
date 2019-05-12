@@ -2,7 +2,6 @@ package impl;
 
 import services.Command;
 import services.Engine;
-import services.Environment;
 import services.Guard;
 import services.Holes;
 import services.Item;
@@ -33,8 +32,13 @@ RequireHolesService{
 	Player player;
 	Guard guard;
 	Item item;
-	Item itemdelete;
+	Item itemdeletePlayer;
+	Item itemdeleteGuard;	
+	Item itemdeleteArms;
+	Item itemdeleteSuper;
 	Guard guarddelete;
+	Guard guardFight;
+	Guard guarddeleteSuper;
 	Command command;
 	Status status;
 	Holes holes;
@@ -45,21 +49,25 @@ RequireHolesService{
 	private boolean toFill;
 	private boolean toPickUp;
 	private boolean toPutDown;
+	private boolean toPutDownTresor;
+	private boolean toFight;
 	private boolean toDelete;
+	private boolean isSuper;
+	private int itemid;
+	private int guardid;
+	private int itemTea;
 
 	public HashMap<CellContent, Pair<Integer, Integer>> cellMap;
 	public HashMap<Pair<Integer, Integer>, Integer> holesMap;
 
 	public ArrayList<Pair<Integer,Integer>> guardinitlist;
 	public Pair<Integer, Integer> playerinit;
+	public Pair<Integer, Integer> playerattack;
+	public Pair<Integer, Integer> attackitem;
 	public ArrayList<Pair<Integer,Integer>> iteminitlist;
 
 	public ArrayList<Guard> guardlist;
 	public ArrayList<Item> itemlist;
-
-	private int guardid;
-	private int guardposition;
-	private int itemposition;
 
 	public EngineImpl() {
 		cellMap = new HashMap<>();
@@ -70,13 +78,10 @@ RequireHolesService{
 		itemlist = new ArrayList<>();
 
 		guardid=Integer.MAX_VALUE;
-		guardposition = Integer.MAX_VALUE;
-		itemposition = Integer.MAX_VALUE;
 		score = 0; 
 		level = 1;
 		life = 3;
-		//Le temps embouch¨¦ des caract¨¨re
-		timeInhole=2;		
+		timeInhole=4;		
 	}
 
 	public void init() {
@@ -90,8 +95,10 @@ RequireHolesService{
 		player=null;
 		guard= null;
 		guarddelete=null;
+		guardFight=null;
 		item=null;
-		itemdelete = null;
+		itemdeletePlayer = null;
+		itemdeleteGuard = null;
 		command=null;
 		status=null;
 		holes =null;
@@ -99,10 +106,10 @@ RequireHolesService{
 		toDelete = false;
 		toPickUp = false;
 		toPutDown =false;
+		toPutDownTresor =false;
 		toDelete = false;
+		isSuper= false;
 		guardid=Integer.MAX_VALUE;
-		guardposition = Integer.MAX_VALUE;
-		itemposition = Integer.MAX_VALUE;
 		score = 0; 
 		life = 3;
 	}
@@ -119,6 +126,7 @@ RequireHolesService{
 		guardlist.add(guard);
 		//ajouter la paire de positions initiales de ce garde dans une liste
 		guardinitlist.add(new Pair<Integer,Integer>(guard.getWdt(), guard.getHgt()));
+		updateGuard(guard);
 	}
 
 	@Override
@@ -134,8 +142,12 @@ RequireHolesService{
 	public void bindItemService(Item service) {
 		item = service;
 		itemlist.add(item);
+		if(item.getNature()==ItemType.TREASURE) {
+			itemTea++;
+		}
 		//stocker la paire de position initiales du tresor.
 		iteminitlist.add(new Pair<Integer, Integer>(item.getItemCol(), item.getItemHgt()));
+		System.out.println("Item" +item.getItemId() + " Wdt :"+ item.getItemCol()+" Hgt :"+ item.getItemHgt());
 		updateItem(item);
 	}
 
@@ -146,19 +158,19 @@ RequireHolesService{
 		System.out.println("Hole Wdt :"+holes.getHoleCol()+" Hole Hgt :"+holes.getHoleHgt());
 	}
 
-
 	public void restart() {
 		//reinitisaliser
-		System.out.println("Restart the game!!!");
+		System.out.println("!!! Recommencer le jeu !!!");
+		System.out.println("Status :"+ status + " Score :"+score + " Life :"+life);
 		cellMap.clear();
 		holesMap.clear();
 		guardid=Integer.MAX_VALUE;
-		guardposition = Integer.MAX_VALUE;
-		itemposition = Integer.MAX_VALUE;
+		itemlist.clear();
 		toFill =false;
 		toPickUp = false;
 		toPutDown =false;
 		toDelete = false;
+		toFight = false;
 
 		int wdtP = playerinit.getKey();
 		int	hgtP = playerinit.getValue();
@@ -175,15 +187,17 @@ RequireHolesService{
 			cellMap.put((Character)guardlist.get(i), new Pair<Integer,Integer>(wdtP, hgtP));
 			System.out.println("Guard "+guardlist.get(i).getGardeId()+" Wdt :"+ guardlist.get(i).getWdt()+" Hgt :"+ guardlist.get(i).getHgt());
 		}
-		for (int i = 0; i < itemlist.size(); i++) {
+
+		//reinitiliser tous les positions des items
+		for (int i = 0; i < iteminitlist.size(); i++) {
 			int wdtI = iteminitlist.get(i).getKey();
 			int hgtI = iteminitlist.get(i).getValue();
-			itemlist.get(i).init(itemlist.get(i).getEnvi(), wdtI , hgtI ,itemlist.get(i).getItemId(), ItemType.TREASURE);
-			cellMap.put((Item)itemlist.get(i), new Pair<Integer,Integer>(wdtI, hgtI));
-			System.out.println("Item" +item.getItemId() + " Wdt :"+wdtI+" item Hgt :"+ hgtI);
+			item.init(player.getEnvi(), wdtI, hgtI, i, ItemType.TREASURE);
+			itemlist.add(item);
+			cellMap.put((Item)item, new Pair<Integer,Integer>(wdtI, hgtI));
+			System.out.println("Item" +itemlist.get(i).getItemId() + " Wdt :"+wdtI+" item Hgt :"+ hgtI);
 		}
 	}
-
 
 	public void updatePlayer(Player player) {
 		int wdt = player.getWdt();
@@ -193,6 +207,7 @@ RequireHolesService{
 		System.out.println("Player Wdt :"+ player.getWdt()+" player Hgt :"+ player.getHgt());
 	}
 
+	//Mettre Ã  jour tous les gardes
 	public void updateGuard(Guard guard) {
 		int wdt = guard.getWdt();
 		int hgt = guard.getHgt();
@@ -204,24 +219,74 @@ RequireHolesService{
 
 				//verifier si ce garde a ete rebouche
 				if(guardid == guard.getGardeId() && toFill) {	
-					//supprimer ce garde dans la liste
-					guardlist.remove(i);
-					guard.getGuardIdList().remove(i);
 					cellMap.remove(guard);			
 
+					//reboucher le trou
+					holes.getEnvi().Fill(guard.getWdt(),guard.getHgt());
 					//prendre les coordonnees de garde
-					wdt = guardinitlist.get(guard.getGardeId()).getKey();
-					hgt = guardinitlist.get(guard.getGardeId()).getValue();
+					wdt = guardinitlist.get(i).getKey();
+					hgt = guardinitlist.get(i).getValue();
 
 					//creer un nouveau garde avec l'ancien id
 					guard.init(guard.getEnvi(), wdt , hgt ,guardid);
-					//todo il a ete ajoute a la fin de liste 
+
+					//supprimer ce garde dans la liste
+					guardlist.remove(i);
+					guard.getGuardIdList().remove(i);
 					guardlist.add(guard);
 
 					//reboucher le trou
 					System.out.println("Guard id :"+ guard.getGardeId()+" a ete rebouche");	
 					toFill=false;
 				}
+
+				//verifier si ce garde a ete attaque
+				else if(guardFight == guard && toFight) {	
+
+					cellMap.remove(guard);			
+
+					//prendre les coordonnees de garde
+					wdt = guardinitlist.get(i).getKey();
+					hgt = guardinitlist.get(i).getValue();
+
+					//creer un nouveau garde avec l'ancien id
+					guard.init(guard.getEnvi(), wdt , hgt ,guard.getGardeId());
+
+					//supprimer ce garde dans la liste
+					guardlist.remove(i);
+					guard.getGuardIdList().remove(i);
+					//todo il a ete ajoute a la fin de liste 
+					guardlist.add(guard);
+
+					//reboucher le trou
+					System.out.println("Guard id :"+ guard.getGardeId()+" a ete attaque");	
+					toFight=false;
+				}
+
+				//verifier si ce garde a ete attaque
+				else if(guarddeleteSuper == guard && isSuper) {	
+
+					cellMap.remove(guard);			
+
+					//prendre les coordonnees de garde
+					wdt = guardinitlist.get(i).getKey();
+					hgt = guardinitlist.get(i).getValue();
+
+					//creer un nouveau garde avec l'ancien id
+					guard.init(guard.getEnvi(), wdt , hgt ,guard.getGardeId());
+
+					//supprimer ce garde dans la liste
+					guardlist.remove(i);
+					guard.getGuardIdList().remove(i);
+					//todo il a ete ajoute a la fin de liste 
+					guardlist.add(guard);
+
+					//reboucher le trou
+					System.out.println("Guard id :"+ guard.getGardeId()+" a ete attaque le joueur en mode super");	
+					System.out.println("Score :"+score + " Life :"+life);
+					isSuper=false;
+				}
+
 				//mettre a jour chaque fois les positions des gardes
 				cellMap.put((Character)guard, new Pair<Integer,Integer>(wdt, hgt));
 				System.out.println("Guard "+guard.getGardeId()+" Wdt :"+ guard.getWdt()+" Hgt :"+ guard.getHgt());
@@ -229,41 +294,71 @@ RequireHolesService{
 		}
 	}
 
+	//Mettre a jour tous les items
 	public void updateItem(Item item) {
 		int wdt = item.getItemCol();
 		int hgt = item.getItemHgt();
 
+		//1er cas, si le garde prend le tresor
 		if (toPickUp) {
-
-			if(item.equals(itemdelete)) {
+			if(item.equals(itemdeleteGuard)) {
 				//Guand le garde prend le tresor, la position de tresor est egal a la position de garde
 				int newwdt = cellMap.get(guarddelete).getKey();
 				int newhgt = cellMap.get(guarddelete).getValue();
 				cellMap.put((Item)item, new Pair<Integer,Integer>(newwdt, newhgt));
-				System.out.println("Item" +item.getItemId() + " Wdt :"+newwdt+" item Hgt :"+ newhgt);
+				//supprimer ancien position
+				itemlist.remove(itemid);
+				item.init(player.getEnvi(), newwdt, newhgt, itemdeleteGuard.getItemId(), itemdeleteGuard.getNature());
+				itemlist.add(item);	
 
-				//si le gardes a depose le tresor
-				if(isToPutDown()) {
+				//2eme cas : si le gardes a depose le tresor
+				if(toPutDown) {
 					int newwdt2 = cellMap.get(guarddelete).getKey();
 					int newhgt2 = cellMap.get(guarddelete).getValue()+1;
-					cellMap.put((Item)item, new Pair<Integer,Integer>(newwdt2, newhgt2));
+					cellMap.put((Item)item, new Pair<Integer,Integer>(newwdt, newhgt));
+					//supprimer ancien position
+					itemlist.remove(itemid);
+					item.init(player.getEnvi(), newwdt2, newhgt2, itemdeleteGuard.getItemId(), itemdeleteGuard.getNature());
+					itemlist.add(item);	
 					System.out.println("Garde" +guarddelete.getGardeId()+" libere le tresor");
 					System.out.println("Item" +item.getItemId() + " Wdt :"+newwdt2+" item Hgt :"+ newhgt2);
 					toPickUp=false;
 				}
-			}
+				else if(toPutDownTresor) { 
+						int newwdt2 = playerattack.getKey();
+						int newhgt2 = playerattack.getValue();
+						cellMap.put((Item)item, new Pair<Integer,Integer>(newwdt, newhgt));
+						//supprimer ancien position
+						itemlist.remove(itemid);
+						item.init(player.getEnvi(), newwdt2, newhgt2, itemdeleteGuard.getItemId(), itemdeleteGuard.getNature());
+						itemlist.add(item);	
+						System.out.println("Garde" +guardFight.getGardeId()+" a ete attaque,il libere le tresor");
+						System.out.println("Item" +item.getItemId() + " Wdt :"+newwdt2+" item Hgt :"+ newhgt2);
+						toPickUp=false;
+						toPutDownTresor =false;
+					}
+				}
 		}
+		// Mettre a jour tous les CellContent
 		else {
 			cellMap.put((Item)item, new Pair<Integer,Integer>(wdt, hgt));
-			System.out.println("Item" +item.getItemId() + " Wdt :"+wdt+" item Hgt :"+ hgt);
 		}
 
 		//si le joueur a pris le tresor
 		if(toDelete) {
-			//parcourir tous les tresors
+			//parcourir tous les tresors, supprimer les items qui n'existent plus
 			for (int i = 0; i < itemlist.size(); i++) {			
-				if(itemlist.get(i).equals(itemdelete)) {
-					itemlist.remove(i);
+				if(itemlist.get(i).equals(itemdeletePlayer)) {
+					itemlist.remove(i);	
+					itemTea--;
+				}
+
+				else if(itemlist.get(i).equals(itemdeleteArms)) {
+					itemlist.remove(i);	
+				}
+
+				else if(itemlist.get(i).equals(itemdeleteSuper)) {
+					itemlist.remove(i);	
 				}
 				toDelete=false;
 			}
@@ -277,10 +372,168 @@ RequireHolesService{
 		holesMap.put(new Pair<Integer, Integer>(wdt, hgt), holes.getTime());
 	}
 
+	//Verifier le status de chaque item
+	public Item checkStatusItem(Item item) {
+		//si la position d'item = la position de joueur 
+		if (item.getItemCol()==player.getWdt() 
+				&&  item.getItemHgt()==player.getHgt()) {
+			//1er cas : si le joueur sur une case contenant un tresor, tresor disparait
+			if(toPickUp==false &&  item.getNature()==ItemType.TREASURE) {
+				//supperimer le tresor dans la liste de tresors
+				toDelete=true;
+				itemdeletePlayer = item;
+				//incremente la score 
+				score++;
+				System.out.println("Le joueur se trouve le tresor"+item.getItemId() + " Wdt :"+item.getItemCol()+" Hgt :"+item.getItemHgt());
+			}
+
+			//2eme cas: si le joueur sur une case contenant une arme, il la prend
+			else if(item.getNature()==ItemType.ARMS){
+				//il peut attaquer les gardes
+				toFight=true;
+				//supperimer cet arme dans la liste de tresors
+				toDelete = true;
+				itemdeleteArms = item;
+				System.out.println("Le joueur prend une arme"+item.getItemId());
+			}
+
+			//3eme cas: si le joueur sur une case contenant item super 
+			else if(item.getNature()==ItemType.SUPER){
+
+				//il est au mode super
+				isSuper = true;
+				//supperimer cet arme dans la liste de tresors
+				toDelete= true;
+				itemdeleteSuper = item;
+				System.out.println("Le joueur prend item Super"+item.getItemId());
+			}
+		}
+
+		//4eme cas: si le garde sur une case contenant un tresor, il prend le tresor
+		for (int i = 0; i < guardlist.size(); i++) {
+			if (guardlist.get(i).getWdt()==item.getItemCol()
+					&& guardlist.get(i).getHgt()==item.getItemHgt()) {
+
+				guarddelete = guardlist.get(i);
+				//supperimer cet tresor dans la liste de tresors
+				itemdeleteGuard = item;
+				itemid=i;
+				toPickUp = true;
+				System.out.println("Guard "+ i + " prend le tresor "+item.getItemId() + " Wdt :"+item.getItemCol()+ "Hgt :"+item.getItemHgt());
+			}
+		}
+
+		return item;
+	}
+
+	public Guard checkStatusGuard(Guard guard) {
+		//1) si le joueur attaque le garde, ne perde pas la vie, garde reinitialise
+		if(isPrepareToFight()) { 
+			if(playerattack!=null) {
+				if(guard.getWdt() == playerattack.getKey()  
+						&& guard.getHgt()== playerattack.getValue()) {	
+					System.out.println("Player attaque "+guard.getGardeId());
+					guardFight = guard;
+					toPutDownTresor=true;
+				}
+			}
+		}
+
+		//2) si le joueur sur une case contenant un garde
+		if (guard.getWdt()==player.getWdt() 
+				&& guard.getHgt()==player.getHgt()) {
+
+			System.out.println("Player a ete attrape par "+guard.getGardeId());
+			//1er cas si le joueur dans le mode super, il ne decremente la vie
+			if(isSuper) {
+				guarddeleteSuper = guard;
+				toPutDownTresor=true;
+				//stocker position de item
+				attackitem = new Pair<Integer, Integer>(player.getWdt(), player.getHgt());
+			}
+
+			//2eme cas, si la vie de joueur est 0, la jeu est perdu 
+			else if(life==0) {
+				this.status=Status.Loss;
+				System.out.println("Tu a perdu!!!");
+				System.out.println("Player wdt:"+player.getWdt()+" hgt:"+player.getHgt());
+				System.out.println("Status :"+ status + " Score :"+score + " Life :"+life);		
+				return guard;
+			}
+
+			//3eme cas, si la vie de joueur est > que 0, decrementer la vie
+			else{
+				life--;
+				//Reinitialise l'ecran
+				restart();
+			}
+			return guard;
+		}
+
+		//3) Verifier/Mise a jour les status de trous
+		if (!holesMap.isEmpty()) {
+			for (Entry<Pair<Integer, Integer>, Integer> hole : holesMap.entrySet()) { 
+
+				//1er cas: si le garde est dans le trou
+				if(hole.getKey().getKey() == guard.getWdt() 
+						&& hole.getKey().getValue()==guard.getHgt()) {
+					//la garde libere le tresor
+					toPutDown=true; 
+
+					//1.1) si le temps de trou == timeInHole
+					if(hole.getValue()==timeInhole) {
+						//init guard a poision initiale
+						guardid = guard.getGardeId();
+						toFill=true;
+
+						//supprimer ce trou dans la liste de trou
+						holesMap.remove(hole.getKey());
+					}
+
+					//1.2) si le temps de trou est < timeInHole
+					else if(hole.getValue()<timeInhole) {
+						holesMap.put(hole.getKey(), hole.getValue()+1);
+					} 
+				}
+
+				//2eme cas: si le joueur est dans le trou, la vie de joueur decremente
+				else if(hole.getKey().getKey() ==player.getWdt() 
+						&& hole.getKey().getValue()==player.getHgt() ) {
+
+					//2.1) si le temps de trou == timeInHole
+					if(hole.getValue()==timeInhole) {
+						System.out.println("Player a ete rebouche");	
+						//decrementer la vie de joueur
+						life--;
+						//2.1.1)si la vie==0, le jeu est perdu
+						if(life==0) {
+							this.status=Status.Loss; 
+							System.out.println("Tu a perdu!!!");
+							System.out.println("Player wdt:"+player.getWdt()+" hgt:"+player.getHgt());
+							System.out.println("Status :"+ status + " Score :"+score + " Life :"+life);
+							return guard;
+						}
+
+						//2.1.2) si la vie > 0
+						else {
+							//Reinitialise l'ecran
+							restart();
+						}
+					}
+					//2.2) si le temps de trou est < timeInHole
+					else if(hole.getValue()<timeInhole) {
+						holesMap.put(hole.getKey(), hole.getValue()+1);
+					} 
+					return guard;
+				}
+			}
+		}
+		return guard;
+	}
+
 	@Override 
 	public void Step() {
-		System.out.println("-----------------------------------");
-
+		System.out.println("-----------------------------------");	
 		if (this.status == Status.Playing) {
 			if(NextCommand()!=null) {
 				player.Step();
@@ -288,105 +541,21 @@ RequireHolesService{
 				updatePlayer(player);
 			}
 
-			Label: 
-				//mise a jour les positions des gardes
-				for (int i = 0; i < guardlist.size(); i++) {
-					guardlist.get(i).Step();
+			//Mise a jour les positions des gardes
+			for (int i = 0; i < guardlist.size(); i++) {
+				guardlist.get(i).Step();
+				updateGuard(checkStatusGuard(guardlist.get(i)));
+			}
 
-					//si le joueur sur une case contenant un garde, le jeu est perdu
-					if (guardlist.get(i).getWdt()==player.getWdt() 
-							&& guardlist.get(i).getHgt()==player.getHgt()) {
-						System.out.println("Player a ete attape par "+guardlist.get(i).getGardeId());
-						//decrementer la vie de joueur
-						life--;
-						//Reinitialise l'ecran
-						restart();
-
-						if(life==0) {
-							this.status=Status.Loss;
-							System.out.println("Player wdt:"+player.getWdt()+" hgt:"+player.getHgt());
-							System.out.println("Status :"+ status + " Score :"+score);
-						}
-						break Label; 
-					}
-
-					//verifier/Mise a jour les status de trous
-					if (!holesMap.isEmpty()) {
-						for (Entry<Pair<Integer, Integer>, Integer> hole : holesMap.entrySet()) {
-
-							//si le temps de trou est 15
-							if(hole.getValue()==timeInhole) {
-								//1er cas: si le garde est dans le trou
-								if(hole.getKey().getKey() == guardlist.get(i).getWdt() 
-										&& hole.getKey().getValue()==guardlist.get(i).getHgt()) {
-									//init guard a poision initiale
-									guardid = guardlist.get(i).getGardeId();
-									toFill=true;
-									//reboucher le trou
-									holes.getEnvi().Fill(guardlist.get(i).getWdt(),guardlist.get(i).getHgt());
-									//supprimer ce trou dans la liste de trou
-									holesMap.remove(hole.getKey());
-								}
-
-								//2eme cas: si le joueur est dans le trou, la vie de joueur decremente
-								else if(hole.getKey().getKey() ==player.getWdt() 
-										&& hole.getKey().getValue()==player.getHgt() ) {
-									System.out.println("Player a ete rebouche");	
-									//decrementer la vie de joueur
-									life--;
-									//Reinitialise l'ecran
-									restart();
-
-									if(life==0) {
-										this.status=Status.Loss; 
-										System.out.println("Player wdt:"+player.getWdt()+" hgt:"+player.getHgt());
-										System.out.println("Status :"+ status + " Score :"+score);
-									}
-									break Label;
-								}
-								//si le temps de trou<15, incrementer le temps
-							}else if(hole.getValue()<timeInhole) {
-								holesMap.put(hole.getKey(), hole.getValue()+1);
-							} 
-						}
-					}
-					updateGuard(guardlist.get(i));
-				}
-
-			//pour les tresors
+			//Mise Ã  jour les tresors
 			for (int j = 0; j < itemlist.size(); j++) {
-				//1er cas: si le joueur sur une case contenant un tresor, tresor disparait
-				if (itemlist.get(j).getItemCol()==player.getWdt() 
-						&&  itemlist.get(j).getItemHgt()==player.getHgt()) {
-					//supperimer le tresor dans la liste de tresors
-					toDelete=true;
-					itemdelete = itemlist.get(j);
-					//incremente la score 
-					score++;
-					System.out.println("Le joueur se trouve sur une case contenant le tresor");
-				}
-
-				//2eme cas: si le garde sur une case contenant un tresor, il prend le tresor
-				for (int i = 0; i < guardlist.size(); i++) {
-					if (guardlist.get(i).getWdt()==itemlist.get(j).getItemCol()
-							&& guardlist.get(i).getHgt()==itemlist.get(j).getItemHgt()) {
-						//Stocker l'ordre de garde de la liste
-						guarddelete = guardlist.get(i);
-						itemdelete = itemlist.get(j);
-						toPickUp = true;
-						System.out.println("Guard "+i + " prend le tresor "+itemlist.get(j).getItemId());
-					}
-				}
-				updateItem(itemlist.get(j));
+				updateItem(checkStatusItem(itemlist.get(j)));
 			}
 
 			//si il y a plus de tresor
-			if(itemlist.size()==0) {
+			if(itemTea==0) {
 				this.status=Status.Win;
 				level ++;
-				System.out.println("You won!!! Pass to next game "+ level);
-				System.out.println("Player wdt:"+player.getWdt()+" hgt:"+player.getHgt());
-				System.out.println("Status :"+ status + " Score :"+score);
 			}
 		}
 	}
@@ -396,7 +565,7 @@ RequireHolesService{
 
 		for(int i=0;i<nbSteps;i++) {
 			//si le jeu termine, sortir la boucle
-			if(getStatus()==Status.Loss || getStatus()==Status.Win) {
+			if(this.status == Status.Loss || this.status == Status.Win){
 				break;
 			}
 
@@ -406,12 +575,23 @@ RequireHolesService{
 		}
 	}
 
+	public int getTimeLimitInHole() {
+		return timeInhole;
+	}
+
 	@Override
 	public Command NextCommand() {
-		//todo keyboard listenner
 		return command;
 	} 
 
+	public void prepareToFight(int x, int y) {
+		playerattack = new Pair<Integer, Integer>(x, y);
+	}
+
+
+	public boolean isPrepareToFight() {
+		return toFight;
+	}
 	public Command setCommand(Command command) {
 		return this.command=command;
 	}
